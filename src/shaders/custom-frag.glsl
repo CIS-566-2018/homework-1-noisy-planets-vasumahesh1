@@ -47,7 +47,7 @@ void main()
   vec4 diffuseColor = fs_Col;
 
   /*----------  Ambient  ----------*/
-  float ambientTerm = 0.2;
+  float ambientTerm = 0.15;
 
   /*----------  Lambertian  ----------*/
   float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));
@@ -62,11 +62,9 @@ void main()
 
     vec4 H = normalize((viewVec + lightVec) / 2.0f);
     specularTerm = pow(max(0.0, dot(normalize(viewVec), reflect(normalize(fs_LightVec), normalize(fs_Nor)))), fs_Spec);
-    // specularTerm = max(pow(dot(H, normalize(fs_Nor)), 128.0), 0.0);
   }
 
   float lightIntensity = ambientTerm + (diffuseTerm + specularTerm) * lightFactor;
-  // lightIntensity = clamp(lightIntensity, 0.0, 1.0);
 
   vec4 finalColor = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);
   finalColor.x = clamp(finalColor.x, 0.0, 1.0);

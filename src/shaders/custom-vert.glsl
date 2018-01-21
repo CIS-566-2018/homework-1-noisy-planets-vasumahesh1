@@ -22,7 +22,7 @@ out vec4 fs_SphereNor;
 out float fs_Spec;
 out float fs_Valid;
 
-vec4 lightPos = vec4(5, 5, 3, 1);
+vec4 lightPos = vec4(5, 0, 3, 1);
 
 const float DEGREE_TO_RAD = 0.0174533;
 const float RAD_TO_DEGREE = 57.2958;
@@ -440,16 +440,6 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
   bool isCoast = false;
 
   if (isWater) {
-    // noise = 0.0;
-    // fs_Spec = 128.0;
-
-    // noiseInput = vertexPosition.xyz * 3.0 + vec3(float(u_Time) * 0.0008);
-    // vec4 noiseWaves = fbmad(noiseInput, 8);
-
-    // fs_Valid = 1.0;
-
-    // vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseWaves.yzw * 0.15)), 0);
-
     vertexColor = BEDROCK_COLOR_1;
     vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseAd.yzw * 0.5)), 0);
 
@@ -485,6 +475,8 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
 
       float snowAppearance = dot(normalize(derivative), vec3(0,1,0));
 
+      vertexNormal = vec4(normalize(originalNormal.xyz - (noiseAd.yzw * 0.45)), 0);
+
       if (landNoise > 0.4 && snowAppearance > 0.5) {
         vertexColor = SNOW_COLOR_1;
         fs_Spec = 128.0;
@@ -515,16 +507,6 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
     //   vertexNormal = normalize(vec4(df, 0) + vertexNormal);
     // }
 
-  }
-  else if (isWater) {
-    noiseInput = vertexPosition.xyz * 0.4;
-    float deepWaterFlagNoise = abs(fbm(noiseInput) * 1.3);
-
-    float deepWaterNoise = originalNoise;
-
-    if (originalNoise < deepWaterThreshold) {
-      // vertexColor = WATER_COLOR_2;
-    }
   }
 
   // vec4 pos = landPosition;
