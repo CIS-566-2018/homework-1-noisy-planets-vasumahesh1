@@ -1,0 +1,14 @@
+Rotation Matrix Online:
+https://www.andre-gaschler.com/rotationconverter/
+
+Texturing basics:
+https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
+
+Noise Gist:
+https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
+
+GLSL code for rotation matrix:
+http://www.neilmendoza.com/glsl-rotation-about-an-arbitrary-axis/
+
+Saving Canvas to Image on WebGL is different because of the render loop.
+https://stackoverflow.com/questions/32556939/saving-canvas-to-image-via-canvas-todataurl-results-in-black-rectangle/32641456#32641456
