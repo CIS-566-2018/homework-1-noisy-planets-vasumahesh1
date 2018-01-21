@@ -18,9 +18,10 @@ uniform vec4 u_Eye;
 in vec4 fs_Nor;
 in vec4 fs_LightVec;
 in vec4 fs_Col;
-in vec4 fs_EmissiveCol;
+in vec4 fs_SphereNor;
 in vec4 fs_Pos;
 in float fs_Spec;
+in float fs_Valid;
 
 out vec4 out_Col; // This is the final output color that you will see on your
                   // screen for the pixel that is currently being processed.
@@ -28,14 +29,25 @@ out vec4 out_Col; // This is the final output color that you will see on your
 
 void main()
 {
+  if (fs_Valid != 0.0) {
+    discard;
+    return;
+  }
+
   // Debug Normals
   // out_Col = vec4((fs_Nor.xyz + vec3(1.0,1.0,1.0))/2.0, 1.0);
+
+  float lightFactor = dot(normalize(fs_SphereNor.xyz), normalize(fs_LightVec.xyz));
+
+  if (lightFactor < 0.0) {
+    lightFactor = 0.0;
+  }
 
   // Material base color (before shading)
   vec4 diffuseColor = fs_Col;
 
   /*----------  Ambient  ----------*/
-  float ambientTerm = 0.4;
+  float ambientTerm = 0.2;
 
   /*----------  Lambertian  ----------*/
   float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));
@@ -53,7 +65,7 @@ void main()
     // specularTerm = max(pow(dot(H, normalize(fs_Nor)), 128.0), 0.0);
   }
 
-  float lightIntensity = ambientTerm + diffuseTerm + specularTerm;
+  float lightIntensity = ambientTerm + (diffuseTerm + specularTerm) * lightFactor;
   // lightIntensity = clamp(lightIntensity, 0.0, 1.0);
 
   vec4 finalColor = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);

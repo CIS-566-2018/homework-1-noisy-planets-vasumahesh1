@@ -18,8 +18,9 @@ out vec4 fs_Nor;
 out vec4 fs_LightVec;
 out vec4 fs_Col;
 out vec4 fs_Pos;
-out vec4 fs_EmissiveCol;
+out vec4 fs_SphereNor;
 out float fs_Spec;
+out float fs_Valid;
 
 vec4 lightPos = vec4(5, 5, 3, 1);
 
@@ -183,16 +184,94 @@ float fbm(vec3 x) {
     x = x * 2.0 + shift;
     a *= 0.5;
   }
-  return v;
+  return (v + 1.0) / 2.0;
 }
 
 vec3 calcNormal(in vec3 pos) {
-  float eps = 0.0005;
+  float eps = 0.5;
   float f0 = fbm(pos);
   float fx = fbm(pos + vec3(eps, 0, 0));
   float fy = fbm(pos + vec3(0, eps, 0));
   float fz = fbm(pos + vec3(0, 0, eps));
   return normalize(vec3((fx - f0) / eps, (fy - f0) / eps, (fz - f0) / eps));
+}
+
+float hash1( float n )
+{
+    return fract( n*17.0*fract( n*0.3183099 ) );
+}
+
+vec4 noised( in vec3 x )
+{
+    vec3 p = floor(x);
+    vec3 w = fract(x);
+    
+    vec3 u = w*w*w*(w*(w*6.0-15.0)+10.0);
+    vec3 du = 30.0*w*w*(w*(w-2.0)+1.0);
+
+    float n = p.x + 317.0*p.y + 157.0*p.z;
+    
+    float a = hash1(n+0.0);
+    float b = hash1(n+1.0);
+    float c = hash1(n+317.0);
+    float d = hash1(n+318.0);
+    float e = hash1(n+157.0);
+    float f = hash1(n+158.0);
+    float g = hash1(n+474.0);
+    float h = hash1(n+475.0);
+
+    // float a = cnoise( p+vec3(0,0,0) );
+    // float b = cnoise( p+vec3(1,0,0) );
+    // float c = cnoise( p+vec3(0,1,0) );
+    // float d = cnoise( p+vec3(1,1,0) );
+    // float e = cnoise( p+vec3(0,0,1) );
+    // float f = cnoise( p+vec3(1,0,1) );
+    // float g = cnoise( p+vec3(0,1,1) );
+    // float h = cnoise( p+vec3(1,1,1) );
+
+    float k0 =   a;
+    float k1 =   b - a;
+    float k2 =   c - a;
+    float k3 =   e - a;
+    float k4 =   a - b - c + d;
+    float k5 =   a - c - e + g;
+    float k6 =   a - b - e + f;
+    float k7 = - a + b + c - d + e - f - g + h;
+
+    return vec4( -1.0+2.0*(k0 + k1*u.x + k2*u.y + k3*u.z + k4*u.x*u.y + k5*u.y*u.z + k6*u.z*u.x + k7*u.x*u.y*u.z), 
+                      2.0* du * vec3( k1 + k4*u.y + k6*u.z + k7*u.y*u.z,
+                                      k2 + k5*u.z + k4*u.x + k7*u.z*u.x,
+                                      k3 + k6*u.x + k5*u.y + k7*u.x*u.y ) );
+}
+
+
+const mat3 m3  = mat3( 0.00,  0.80,  0.60,
+                      -0.80,  0.36, -0.48,
+                      -0.60, -0.48,  0.64 );
+const mat3 m3i = mat3( 0.00, -0.80, -0.60,
+                       0.80,  0.36, -0.48,
+                       0.60, -0.48,  0.64 );
+
+vec4 fbmad( in vec3 x, int octaves ) 
+{
+    float f = 1.98;  // could be 2.0
+    float s = 0.49;  // could be 0.5
+    float a = 0.0;
+    float b = 0.5;
+    vec3  d = vec3(0.0);
+    mat3  m = mat3(1.0,0.0,0.0,
+                   0.0,1.0,0.0,
+                   0.0,0.0,1.0);
+    for( int i=0; i < octaves; i++ )
+    {
+        vec4 n = noised(x);
+        a += b*n.x;          // accumulate values   
+        d += b*m*n.yzw;      // accumulate derivatives
+        b *= s;
+        x = f*m3*x;
+        m = f*m3i*m;
+    }
+    return vec4( a, d );
 }
 
 const vec4 GRASS_COLOR_1 = vec4(vec3(112.0, 166.0, 3.0) / 255.0, 1.0);
@@ -330,16 +409,22 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
                   inout vec4 vertexColor, bool isNight) {
   vertexColor = WATER_COLOR_1;
 
+  fs_Valid = 0.0;
+
   vec4 originalPosition = vertexPosition;
   vec4 originalNormal = vertexNormal;
 
-  vec3 noiseInput = vertexPosition.xyz * 0.8;
+  fs_SphereNor = originalNormal;
 
-  float waterThreshold = 0.45;
+  vec3 noiseInput = vertexPosition.xyz * 3.0;
+
+  float waterThreshold = 0.0;
   float deepWaterThreshold = waterThreshold - 0.15;
-  float maxScale = 3.0;
+  float maxScale = 1.0;
 
-  float noise = abs(fbm(noiseInput)) * maxScale;
+  vec4 noiseAd = fbmad(noiseInput, 8);
+  float noise = noiseAd.x;
+  vec3 derivative = noiseAd.yzw;
 
   noiseInput = vertexPosition.xyz * 0.532;
   float rainfallNoise = fbm(noiseInput);
@@ -354,14 +439,21 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
   if (isWater) {
     noise = 0.0;
     fs_Spec = 128.0;
+
+    noiseInput = vertexPosition.xyz * 3.0 + vec3(float(u_Time) * 0.0008);
+    vec4 noiseWaves = fbmad(noiseInput, 8);
+
+    vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseWaves.yzw * 0.15)), 0);
+
   } else {
     noise = (noise - waterThreshold) / (maxScale - waterThreshold);
     vertexColor = GRASS_COLOR_1;
 
     fs_Spec = 0.0;
 
-    if (noise < 0.05) {
+    if (noise < 0.04) {
       vertexColor = SAND_COLOR_1;
+      fs_Spec = 2.0;
       isCoast = true;
     } else if (noise > 0.15) {
       vertexColor = GRASS_COLOR_2;
@@ -369,62 +461,51 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
   }
 
   float landNoise = noise;
-  float landHeight = landNoise / maxScale;
-  vertexPosition = originalPosition + (vertexNormal * landHeight);
+  float landHeight = landNoise / 4.0;
+  vertexPosition = originalPosition + (originalNormal * landHeight);
 
   vec4 landPosition = vertexPosition;
 
   if (isGrass) {
-    noiseInput = vertexPosition.xyz * 0.75;
-    float mountainFlagNoise = abs(fbm(noiseInput));
+    vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseAd.yzw * 0.36)), 0);
 
-    if (mountainFlagNoise > mountainStartRange && landNoise > 0.2) {
-      mountainFlagNoise =
-          (mountainFlagNoise - mountainStartRange) / (1.0 - mountainStartRange);
-
-      noiseInput = vertexPosition.xyz * 5.0;
-      float mountainHeightNoise = abs(fbm(noiseInput) * 5.0);
-
-      float height =
-          mix(landHeight, mountainHeightNoise, mountainFlagNoise) / 4.0;
-
-      vertexPosition = vertexPosition + (vertexNormal * height);
+    if (landNoise > 0.3) {
       vertexColor = ROCK_COLOR_1;
 
-      if (height > 0.04) {
+      float snowAppearance = dot(normalize(derivative), vec3(0,1,0));
+
+      if (landNoise > 0.4 && snowAppearance > 0.5) {
         vertexColor = SNOW_COLOR_1;
         fs_Spec = 128.0;
       }
-
-      vec3 df = calcNormal(vertexPosition.xyz * 513.6) * 0.15;
-      vertexNormal = normalize(vec4(df, 0) + vertexNormal);
-
-    } else if (rainfallNoise > 0.2 && landNoise < 0.1) {
-      vertexColor = MARSH_COLOR_1;
-
-      noiseInput = vertexPosition.xyz * 23.7;
-      float riverNoise = abs(fbm(noiseInput));
-
-      if (riverNoise > 0.2) {
-        float height = -0.02;
-        vertexPosition = vertexPosition + (vertexNormal * height);
-        vertexColor = WATER_COLOR_1;
-      } else if (riverNoise > 0.25) {
-        vertexColor = MARSH_COLOR_2;
-      }
-    } else if (rainfallNoise > 0.2) {
-      vertexColor = RAINFOREST_COLOR_1;
-    } else if (rainfallNoise < -0.4 && landNoise < 0.1) {
-      vertexColor = SAND_COLOR_2;
-      vec3 df = calcNormal(vertexPosition.xyz * 237.6) * 0.25;
-      vertexNormal = normalize(vec4(df, 0) + vertexNormal);
-    } else {
-      // Just grass
-      vec3 df = calcNormal(vertexPosition.xyz * 137.6) * 0.05;
-      vertexNormal = normalize(vec4(df, 0) + vertexNormal);
     }
+    // else if (rainfallNoise > 0.2 && landNoise < 0.1) {
+    //   vertexColor = MARSH_COLOR_1;
 
-  } else if (isWater) {
+    //   noiseInput = vertexPosition.xyz * 23.7;
+    //   float riverNoise = abs(fbm(noiseInput));
+
+    //   if (riverNoise > 0.2) {
+    //     float height = -0.02;
+    //     vertexPosition = vertexPosition + (vertexNormal * height);
+    //     vertexColor = WATER_COLOR_1;
+    //   } else if (riverNoise > 0.25) {
+    //     vertexColor = MARSH_COLOR_2;
+    //   }
+    // } else if (rainfallNoise > 0.2) {
+    //   vertexColor = RAINFOREST_COLOR_1;
+    // } else if (rainfallNoise < -0.4 && landNoise < 0.1) {
+    //   vertexColor = SAND_COLOR_2;
+    //   vec3 df = calcNormal(vertexPosition.xyz * 237.6) * 0.25;
+    //   vertexNormal = normalize(vec4(df, 0) + vertexNormal);
+    // } else {
+    //   // Just grass
+    //   vec3 df = calcNormal(vertexPosition.xyz * 137.6) * 0.05;
+    //   vertexNormal = normalize(vec4(df, 0) + vertexNormal);
+    // }
+
+  }
+  else if (isWater) {
     noiseInput = vertexPosition.xyz * 0.4;
     float deepWaterFlagNoise = abs(fbm(noiseInput) * 1.3);
 
@@ -435,34 +516,34 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
     }
   }
 
-  vec4 pos = landPosition;
-  vec4 normal = originalNormal;
-  bool isDirty = false;
-  bool result = false;
+  // vec4 pos = landPosition;
+  // vec4 normal = originalNormal;
+  // bool isDirty = false;
+  // bool result = false;
 
-  vec4 volcanoCenter;
+  // vec4 volcanoCenter;
 
-  if (!isDirty) {
-    volcanoCenter = rotationMatrix(vec3(1, 0, 0), -25.0 * DEGREE_TO_RAD) * vec4(0, 0.9, 0, 1);
-    result = drawVolcano(vec3(volcanoCenter), pos, normal, vertexColor);
-  }
+  // if (!isDirty) {
+  //   volcanoCenter = rotationMatrix(vec3(1, 0, 0), -25.0 * DEGREE_TO_RAD) * vec4(0, 0.9, 0, 1);
+  //   result = drawVolcano(vec3(volcanoCenter), pos, normal, vertexColor);
+  // }
 
-  if (result && !isDirty) {
-    vertexPosition = pos;
-    vertexNormal = normal;
-    isDirty = true;
-  }
+  // if (result && !isDirty) {
+  //   vertexPosition = pos;
+  //   vertexNormal = normal;
+  //   isDirty = true;
+  // }
 
-  if (!isDirty) {
-    volcanoCenter = rotationMatrix(vec3(0, 1, 0), -80.0 * DEGREE_TO_RAD) * rotationMatrix(vec3(1, 0, 0), -100.0 * DEGREE_TO_RAD) * vec4(0, 0.9, 0, 1);
-    result = drawVolcano(vec3(volcanoCenter), pos, normal, vertexColor);
-  }
+  // if (!isDirty) {
+  //   volcanoCenter = rotationMatrix(vec3(0, 1, 0), -80.0 * DEGREE_TO_RAD) * rotationMatrix(vec3(1, 0, 0), -100.0 * DEGREE_TO_RAD) * vec4(0, 0.9, 0, 1);
+  //   result = drawVolcano(vec3(volcanoCenter), pos, normal, vertexColor);
+  // }
 
-  if (result && !isDirty) {
-    vertexPosition = pos;
-    vertexNormal = normal;
-    isDirty = true;
-  }
+  // if (result && !isDirty) {
+  //   vertexPosition = pos;
+  //   vertexNormal = normal;
+  //   isDirty = true;
+  // }
 
   // if (noise > 0.1) {
   //   vec3 df = calcNormal(vertexPosition.xyz);
@@ -474,7 +555,6 @@ void main() {
   vec4 vertexColor;
   vec4 vertexPosition = vs_Pos;
   vec4 vertexNormal = vs_Nor;
-  fs_EmissiveCol = vec4(-1, -1, -1, -1);
 
   float lightRadius = 10.0;
   lightPos.x = lightRadius * cos(float(u_Time) * 0.003);

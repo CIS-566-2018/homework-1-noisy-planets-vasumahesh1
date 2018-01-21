@@ -18,8 +18,9 @@ out vec4 fs_Nor;
 out vec4 fs_LightVec;
 out vec4 fs_Col;
 out vec4 fs_Pos;
-out vec4 fs_EmissiveCol;
 out float fs_Spec;
+out vec4 fs_SphereNor;
+out float fs_Valid;
 
 const vec4 lightPos = vec4(5, 5, 3, 1);
 
@@ -185,7 +186,7 @@ float fbm(vec3 x) {
     a *= 0.5;
     f = f * 2.0;
   }
-  return v;
+  return  v; // (v + 1.0) / 2.0;
 }
 
 mat4 rotationMatrix(vec3 axis, float angle) {
@@ -203,7 +204,7 @@ mat4 rotationMatrix(vec3 axis, float angle) {
 }
 
 vec3 calcNormal(in vec3 pos) {
-  float eps = 0.0005;
+  float eps = 0.5;
   float f0 = fbm(pos);
   float fx = fbm(pos + vec3(eps, 0, 0));
   float fy = fbm(pos + vec3(0, eps, 0));
@@ -326,48 +327,129 @@ float rayConeIntersection(vec3 rayOrigin, vec3 rayDirection,
   return 0.0;
 }
 
+float hash1( float n )
+{
+    return fract( n*17.0*fract( n*0.3183099 ) );
+}
+
+vec4 noised( in vec3 x )
+{
+    vec3 p = floor(x);
+    vec3 w = fract(x);
+    
+    vec3 u = w*w*w*(w*(w*6.0-15.0)+10.0);
+    vec3 du = 30.0*w*w*(w*(w-2.0)+1.0);
+
+    float n = p.x + 317.0*p.y + 157.0*p.z;
+    
+    float a = hash1(n+0.0);
+    float b = hash1(n+1.0);
+    float c = hash1(n+317.0);
+    float d = hash1(n+318.0);
+    float e = hash1(n+157.0);
+    float f = hash1(n+158.0);
+    float g = hash1(n+474.0);
+    float h = hash1(n+475.0);
+
+    // float a = cnoise( p+vec3(0,0,0) );
+    // float b = cnoise( p+vec3(1,0,0) );
+    // float c = cnoise( p+vec3(0,1,0) );
+    // float d = cnoise( p+vec3(1,1,0) );
+    // float e = cnoise( p+vec3(0,0,1) );
+    // float f = cnoise( p+vec3(1,0,1) );
+    // float g = cnoise( p+vec3(0,1,1) );
+    // float h = cnoise( p+vec3(1,1,1) );
+
+    float k0 =   a;
+    float k1 =   b - a;
+    float k2 =   c - a;
+    float k3 =   e - a;
+    float k4 =   a - b - c + d;
+    float k5 =   a - c - e + g;
+    float k6 =   a - b - e + f;
+    float k7 = - a + b + c - d + e - f - g + h;
+
+    return vec4( -1.0+2.0*(k0 + k1*u.x + k2*u.y + k3*u.z + k4*u.x*u.y + k5*u.y*u.z + k6*u.z*u.x + k7*u.x*u.y*u.z), 
+                      2.0* du * vec3( k1 + k4*u.y + k6*u.z + k7*u.y*u.z,
+                                      k2 + k5*u.z + k4*u.x + k7*u.z*u.x,
+                                      k3 + k6*u.x + k5*u.y + k7*u.x*u.y ) );
+}
+
+
+const mat3 m3  = mat3( 0.00,  0.80,  0.60,
+                      -0.80,  0.36, -0.48,
+                      -0.60, -0.48,  0.64 );
+const mat3 m3i = mat3( 0.00, -0.80, -0.60,
+                       0.80,  0.36, -0.48,
+                       0.60, -0.48,  0.64 );
+
+vec4 fbmad( in vec3 x, int octaves ) 
+{
+    float f = 1.98;  // could be 2.0
+    float s = 0.49;  // could be 0.5
+    float a = 0.0;
+    float b = 0.5;
+    vec3  d = vec3(0.0);
+    mat3  m = mat3(1.0,0.0,0.0,
+                   0.0,1.0,0.0,
+                   0.0,0.0,1.0);
+    for( int i=0; i < octaves; i++ )
+    {
+        vec4 n = noised(x);
+        a += b*n.x;          // accumulate values   
+        d += b*m*n.yzw;      // accumulate derivatives
+        b *= s;
+        x = f*m3*x;
+        m = f*m3i*m;
+    }
+    return vec4( a, d );
+}
+
 void main() {
   vec4 vertexColor = vec4(1.0,1.0,1.0,1.0);
   vec4 vertexPosition = vs_Pos;
   vec4 vertexNormal = vs_Nor;
 
+  fs_Valid = 0.0;
+
   float displacement = 0.0;
 
-  vec3 vertexPositionVec3 = vertexPosition.xyz;
-  float dist1 = distance(vec3(0, 0.8, 0), vertexPositionVec3);
 
-  if (dist1 < 0.4) {
-    vec3 rayDirection = normalize(vertexPositionVec3 - vec3(0, 0.8, 0));
-    vec3 rayOrigin = vertexPositionVec3;
+  // vec3 vertexPositionVec3 = vertexPosition.xyz;
+  // float dist1 = distance(vec3(0, 0.8, 0), vertexPositionVec3);
 
-    vec3 coneTip = vec3(0, 1.3, 0);
-    vec3 coneAxisVector = normalize(vec3(0, 0.8, 0) - coneTip);
+  // if (dist1 < 0.4) {
+  //   vec3 rayDirection = normalize(vertexPositionVec3 - vec3(0, 0.8, 0));
+  //   vec3 rayOrigin = vertexPositionVec3;
 
-    float tValue =
-        rayConeIntersection(rayOrigin, rayDirection,
-                           coneTip , coneAxisVector, 10.0);
+  //   vec3 coneTip = vec3(0, 1.3, 0);
+  //   vec3 coneAxisVector = normalize(vec3(0, 0.8, 0) - coneTip);
 
-        if (tValue > 0.1) {
-          tValue = 0.1;
-        }
+  //   float tValue =
+  //       rayConeIntersection(rayOrigin, rayDirection,
+  //                          coneTip , coneAxisVector, 10.0);
 
-        float coneCenter = dot(normalize(rayOrigin - coneTip), normalize(coneAxisVector));
+  //       if (tValue > 0.1) {
+  //         tValue = 0.1;
+  //       }
 
-        if (tValue > 0.0) {
-          vec3 point = rayOrigin + (tValue * rayDirection);
+  //       float coneCenter = dot(normalize(rayOrigin - coneTip), normalize(coneAxisVector));
 
-          vertexPosition = vec4(point, 1);
-          vertexNormal = vec4(normalize(point - vec3(0, 0.8, 0)), 0);
-          displacement = 0.0;
+  //       if (tValue > 0.0) {
+  //         vec3 point = rayOrigin + (tValue * rayDirection);
 
-          vertexColor = vec4(1.0,0.0,0.0,1.0);
-        }
+  //         vertexPosition = vec4(point, 1);
+  //         vertexNormal = vec4(normalize(point - vec3(0, 0.8, 0)), 0);
+  //         displacement = 0.0;
 
-        if (coneCenter >= 1.0 - 0.001) {
-          vertexPosition = vec4(vertexPosition.xyz + (coneAxisVector * 0.1), 1.0);
-          vertexColor = vec4(0,0,0,1);
-        }
-      }
+  //         vertexColor = vec4(1.0,0.0,0.0,1.0);
+  //       }
+
+  //       if (coneCenter >= 1.0 - 0.001) {
+  //         vertexPosition = vec4(vertexPosition.xyz + (coneAxisVector * 0.1), 1.0);
+  //         vertexColor = vec4(0,0,0,1);
+  //       }
+  //     }
 
 
   // vec3 cityCenter = vec3(0.0, 0.453, 0.891);
@@ -386,10 +468,16 @@ void main() {
 
   // noise = noise / 3.0;
 
+  vec4 noiseAd = fbmad(vertexPosition.xyz, 8);
+  float noise = noiseAd.x;
+  // vec3 df = calcNormal(vertexPosition.xyz * 7.0);
+
+  vertexColor = vec4(noise, noise, noise, 1);
+
   fs_Col = vertexColor; //vec4(noise, noise, noise, 1);
 
-  // vertexNormal = vec4(normalize(df), 0);
-  // vertexPosition += (vertexNormal * (displacement / 3.0));
+  vertexPosition += (vertexNormal * (noise));
+  vertexNormal = vec4(normalize(vertexNormal.xyz + noiseAd.yzw), 0);
 
   mat3 invTranspose = mat3(u_ModelInvTr);
   fs_Nor = vec4(invTranspose * vec3(vertexNormal), 0);
