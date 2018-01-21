@@ -30,6 +30,7 @@ let activeShader: ShaderProgram;
 let planetShader: ShaderProgram;
 let testShader: ShaderProgram;
 let skyShader: ShaderProgram;
+let waterShader: ShaderProgram;
 
 let shaderMode: number = 0;
 let frameCount: number = 0;
@@ -145,6 +146,14 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/sky-frag.glsl')),
   ]);
 
+  waterShader = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/custom-water-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/custom-frag.glsl')),
+  ]);
+
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
   masterBallTexture = new Texture('./src/textures/masterball_m.png');
 
   loadAssets();
@@ -176,9 +185,13 @@ function main() {
       )
     );
 
+    waterShader.setTime(frameCount);
+    waterShader.setEyePosition(vec4.fromValues(camera.position[0], camera.position[1], camera.position[2], 1));
+
     switch (shaderMode) {
       case 0:
         renderer.render(camera, activeShader, [icosphere]);
+        renderer.render(camera, waterShader, [icosphere]);
         break;
 
       default:

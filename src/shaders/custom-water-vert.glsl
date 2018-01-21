@@ -286,8 +286,8 @@ const vec4 ROCK_COLOR_2 = vec4(vec3(94.0, 87.0, 82.0) / 255.0, 1.0);
 const vec4 SAND_COLOR_1 = vec4(vec3(237.0, 209.0, 127.0) / 255.0, 1.0);
 const vec4 SAND_COLOR_2 = vec4(vec3(255.0, 198.0, 57.0) / 255.0, 1.0);
 
-const vec4 WATER_COLOR_1 = vec4(vec3(107.0, 137.0, 186.0) / 255.0, 1.0);
-const vec4 WATER_COLOR_2 = vec4(vec3(87.0, 112.0, 163.0) / 255.0, 1.0);
+const vec4 WATER_COLOR_1 = vec4(vec3(25.0, 163.0, 167.0) / 255.0, 0.5);
+const vec4 WATER_COLOR_2 = vec4(vec3(16.0, 118.0, 141.0) / 255.0, 0.5);
 
 const vec4 FIRE_COLOR_1 = vec4(vec3(217.0, 63.0, 7.0) / 255.0, 1.0);
 const vec4 FIRE_COLOR_2 = vec4(vec3(242.0, 193.0, 102.0) / 255.0, 1.0);
@@ -295,9 +295,6 @@ const vec4 FIRE_COLOR_2 = vec4(vec3(242.0, 193.0, 102.0) / 255.0, 1.0);
 const vec4 RAINFOREST_COLOR_1 = vec4(vec3(81.0, 89.0, 0.0) / 255.0, 1.0);
 
 const vec4 SNOW_COLOR_1 = vec4(vec3(232.0, 232.0, 232.0) / 255.0, 1.0);
-
-const vec4 BEDROCK_COLOR_1 = vec4(vec3(68.0, 85.0, 102.0) / 255.0, 1.0);
-const vec4 BEDROCK_COLOR_2 = vec4(vec3(34.0, 43.0, 51.0) / 255.0, 1.0);
 
 float mountainStartRange = 0.325;
 
@@ -412,7 +409,7 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
                   inout vec4 vertexColor, bool isNight) {
   vertexColor = WATER_COLOR_1;
 
-  fs_Valid = 0.0;
+  fs_Valid = 1.0;
 
   vec4 originalPosition = vertexPosition;
   vec4 originalNormal = vertexNormal;
@@ -422,7 +419,7 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
   vec3 noiseInput = vertexPosition.xyz * 3.0;
 
   float waterThreshold = 0.0;
-  float deepWaterThreshold = waterThreshold - 0.15;
+  float deepWaterThreshold = waterThreshold - 0.20;
   float maxScale = 1.0;
 
   vec4 noiseAd = fbmad(noiseInput, 8);
@@ -440,24 +437,18 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
   bool isCoast = false;
 
   if (isWater) {
-    // noise = 0.0;
-    // fs_Spec = 128.0;
+    noise = 0.0;
+    fs_Spec = 128.0;
 
-    // noiseInput = vertexPosition.xyz * 3.0 + vec3(float(u_Time) * 0.0008);
-    // vec4 noiseWaves = fbmad(noiseInput, 8);
+    fs_Valid = 0.0;
 
-    // fs_Valid = 1.0;
+    noiseInput = vertexPosition.xyz * 3.0 + vec3(float(u_Time) * 0.0008);
+    vec4 noiseWaves = fbmad(noiseInput, 8);
 
-    // vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseWaves.yzw * 0.15)), 0);
+    vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseWaves.yzw * 0.15)), 0);
 
-    vertexColor = BEDROCK_COLOR_1;
-    vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseAd.yzw * 0.5)), 0);
-
-    if (noise < deepWaterThreshold) {
-      vertexColor = BEDROCK_COLOR_2;
-    }
   } else {
-  
+    noise = (noise - waterThreshold) / (maxScale - waterThreshold);
     vertexColor = GRASS_COLOR_1;
 
     fs_Spec = 0.0;
@@ -522,9 +513,15 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
 
     float deepWaterNoise = originalNoise;
 
-    if (originalNoise < deepWaterThreshold) {
-      // vertexColor = WATER_COLOR_2;
-    }
+    // if (originalNoise < deepWaterThresholdStart) {
+    //   float val = (originalNoise - deepWaterThreshold) / (deepWaterThresholdStart - deepWaterThreshold);
+    //   vertexColor = vec4(mix(WATER_COLOR_1.xyz, WATER_COLOR_2.xyz, val), mix(0.4, 0.7, val));
+    //   // vertexColor = vec4(val, 0,0, 1);
+
+    // }
+    // if (originalNoise < deepWaterThreshold) {
+    //   vertexColor = WATER_COLOR_2;
+    // }
   }
 
   // vec4 pos = landPosition;
@@ -620,7 +617,7 @@ void main() {
   fs_Col = vec4(noise, noise, noise, 1);
   fs_Col = vertexColor;
 
-  vec3 df = calcNormal(vertexPosition.xyz);
+  // vec3 df = calcNormal(vertexPosition.xyz);
 
   // vertexNormal = vec4(normalize(vertexNormal.xyz - df), 0);
   // vertexPosition += (vertexNormal * (displacement / 3.0));
