@@ -32,6 +32,8 @@ class ShaderProgram {
   unifEye: WebGLUniformLocation;
   unifTime: WebGLUniformLocation;
   unifTexture: WebGLUniformLocation;
+  unifTexture1: WebGLUniformLocation;
+  unifTexture2: WebGLUniformLocation;
   unifDimensions: WebGLUniformLocation;
   unifInvViewProj: WebGLUniformLocation;
 
@@ -57,6 +59,8 @@ class ShaderProgram {
     this.unifEye = gl.getUniformLocation(this.prog, "u_Eye");
     this.unifTime = gl.getUniformLocation(this.prog, "u_Time");
     this.unifTexture = gl.getUniformLocation(this.prog, "u_Texture");
+    this.unifTexture1 = gl.getUniformLocation(this.prog, "u_Texture1");
+    this.unifTexture2 = gl.getUniformLocation(this.prog, "u_Texture2");
     this.unifDimensions = gl.getUniformLocation(this.prog, "u_Dimensions");
   }
 
@@ -185,10 +189,14 @@ class ShaderProgram {
    * @memberof   ShaderProgram
    *
    */
-  setTexture() {
+  setTexture(slot: number) {
     this.use();
-    if (this.unifTexture !== -1) {
+    if (this.unifTexture !== -1 && slot == 0) {
       gl.uniform1i(this.unifTexture, 0);
+    } else if (this.unifTexture1 !== -1 && slot == 1) {
+      gl.uniform1i(this.unifTexture1, 1);
+    }  else if (this.unifTexture2 !== -1 && slot == 2) {
+      gl.uniform1i(this.unifTexture2, 2);
     }
   }
 

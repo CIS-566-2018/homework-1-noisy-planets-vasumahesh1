@@ -2,6 +2,13 @@ import { vec4, mat4 } from 'gl-matrix';
 import Drawable from './Drawable';
 import { gl } from '../../globals';
 
+// let slotArray = [gl.TEXTURE0, gl.TEXTURE1, gl.TEXTURE2, gl.TEXTURE3, gl.TEXTURE4];
+const glMap: { [key: number]: string } = {
+    0: "TEXTURE0",
+    1: 'TEXTURE1'
+};
+
+
 export class Texture {
   texture: WebGLTexture;
 
@@ -62,8 +69,28 @@ export class Texture {
    * @memberof   Texture
    *
    */
-  bind() {
-    gl.activeTexture(gl.TEXTURE0);
+  bind(slot: number) {
+    let slotType;
+
+    switch (slot) {
+      case 1:
+        slotType = gl.TEXTURE1;
+        break;
+
+      case 2:
+        slotType = gl.TEXTURE2;
+        break;
+
+      case 3:
+        slotType = gl.TEXTURE3;
+        break;
+
+      default:
+        slotType = gl.TEXTURE0;
+        break;
+    }
+
+    gl.activeTexture(slotType);
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
   }
 }

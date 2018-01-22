@@ -37,7 +37,9 @@ let frameCount: number = 0;
 
 let shouldCapture: boolean = false;
 
-let masterBallTexture: Texture;
+let grassTexture: Texture;
+let mountainTexture: Texture;
+let snowTexture: Texture;
 
 /**
  * @brief      Loads the pokeball scene.
@@ -154,7 +156,9 @@ function main() {
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-  masterBallTexture = new Texture('./src/textures/masterball_m.png');
+  grassTexture = new Texture('./src/textures/foliage.png');
+  mountainTexture = new Texture('./src/textures/mountain.jpg');
+  snowTexture = new Texture('./src/textures/snow.png');
 
   loadAssets();
   loadPlanetScene();
@@ -188,6 +192,15 @@ function main() {
 
     waterShader.setTime(frameCount);
     waterShader.setEyePosition(vec4.fromValues(position[0], position[1], position[2], 1));
+
+    grassTexture.bind(0);
+    activeShader.setTexture(0);
+
+    mountainTexture.bind(1);
+    activeShader.setTexture(1);
+
+    snowTexture.bind(2);
+    activeShader.setTexture(2);
 
     switch (shaderMode) {
       case 0:

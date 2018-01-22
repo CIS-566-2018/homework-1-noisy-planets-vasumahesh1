@@ -23,6 +23,7 @@ out vec4 fs_Pos;
 out vec4 fs_SphereNor;
 out float fs_Spec;
 out float fs_Valid;
+out float fs_useMatcap;
 
 vec4 lightPos = vec4(5, 0, 3, 1);
 
@@ -401,11 +402,13 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
     vertexColor = GRASS_COLOR_1;
 
     fs_Spec = 0.0;
+    fs_useMatcap = 1.0;
 
     if (noise < 0.04) {
       vertexColor = SAND_COLOR_1;
       fs_Spec = 2.0;
       isCoast = true;
+      fs_useMatcap = 0.0;
     } else if (noise > 0.15) {
       vertexColor = GRASS_COLOR_2;
     }
@@ -422,12 +425,14 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
 
     if (landNoise > 0.3) {
       vertexColor = ROCK_COLOR_1;
+      fs_useMatcap = 2.0;
 
       float snowAppearance = dot(normalize(derivative), vec3(0,1,0));
 
       vertexNormal = vec4(normalize(originalNormal.xyz - (noiseAd.yzw * 0.45)), 0);
 
       if (landNoise > 0.4 && snowAppearance > 0.5) {
+        fs_useMatcap = 3.0;
         vertexColor = SNOW_COLOR_1;
         fs_Spec = 128.0;
       }
@@ -498,6 +503,8 @@ void main() {
   vec4 vertexColor;
   vec4 vertexPosition = vs_Pos;
   vec4 vertexNormal = vs_Nor;
+
+  fs_useMatcap = 0.0;
 
   float lightRadius = 10.0;
   lightPos.x = lightRadius * cos(float(u_Time) * 0.003);

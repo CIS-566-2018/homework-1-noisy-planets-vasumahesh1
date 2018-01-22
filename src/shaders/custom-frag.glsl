@@ -13,6 +13,9 @@ precision highp float;
 
 uniform vec4 u_Color; // The color with which to render this instance of geometry.
 uniform vec4 u_Eye;
+uniform sampler2D u_Texture;
+uniform sampler2D u_Texture1;
+uniform sampler2D u_Texture2;
 // These are the interpolated values out of the rasterizer, so you can't know
 // their specific values without knowing the vertices that contributed to them
 in vec4 fs_Nor;
@@ -22,6 +25,7 @@ in vec4 fs_SphereNor;
 in vec4 fs_Pos;
 in float fs_Spec;
 in float fs_Valid;
+in float fs_useMatcap;
 
 out vec4 out_Col; // This is the final output color that you will see on your
                   // screen for the pixel that is currently being processed.
@@ -43,11 +47,29 @@ void main()
     lightFactor = 0.0;
   }
 
+  lightFactor += 0.3;
+  lightFactor = clamp(lightFactor, 0.0, 1.0);
+
   // Material base color (before shading)
   vec4 diffuseColor = fs_Col;
+  float alpha = diffuseColor.a;;
+
+  if (fs_useMatcap > 2.0) {
+    vec2 coords = vec2((fs_Nor.x + 1.0) / 2.0, (fs_Nor.y + 1.0) / 2.0);
+    diffuseColor = texture(u_Texture2, coords);
+    alpha = 1.0;
+  } else if (fs_useMatcap > 1.0) {
+    vec2 coords = vec2((fs_Nor.x + 1.0) / 2.0, (fs_Nor.y + 1.0) / 2.0);
+    diffuseColor = texture(u_Texture1, coords);
+    alpha = 1.0;
+  } else if (fs_useMatcap > 0.0) {
+    vec2 coords = vec2((fs_Nor.x + 1.0) / 2.0, (fs_Nor.y + 1.0) / 2.0);
+    diffuseColor = texture(u_Texture, coords);
+    alpha = 1.0;
+  }
 
   /*----------  Ambient  ----------*/
-  float ambientTerm = 0.15;
+  float ambientTerm = 0.1;
 
   /*----------  Lambertian  ----------*/
   float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));
@@ -66,7 +88,7 @@ void main()
 
   float lightIntensity = ambientTerm + (diffuseTerm + specularTerm) * lightFactor;
 
-  vec4 finalColor = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);
+  vec4 finalColor = vec4(diffuseColor.rgb * lightIntensity, alpha);
   finalColor.x = clamp(finalColor.x, 0.0, 1.0);
   finalColor.y = clamp(finalColor.y, 0.0, 1.0);
   finalColor.z = clamp(finalColor.z, 0.0, 1.0);

@@ -21,6 +21,7 @@ out vec4 fs_Pos;
 out float fs_Spec;
 out vec4 fs_SphereNor;
 out float fs_Valid;
+out float fs_useMatcap;
 
 const vec4 lightPos = vec4(5, 5, 3, 1);
 

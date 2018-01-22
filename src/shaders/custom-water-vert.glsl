@@ -21,6 +21,7 @@ out vec4 fs_Pos;
 out vec4 fs_SphereNor;
 out float fs_Spec;
 out float fs_Valid;
+out float fs_useMatcap;
 
 vec4 lightPos = vec4(5, 0, 3, 1);
 
@@ -274,29 +275,7 @@ vec4 fbmad( in vec3 x, int octaves )
     return vec4( a, d );
 }
 
-const vec4 GRASS_COLOR_1 = vec4(vec3(112.0, 166.0, 3.0) / 255.0, 1.0);
-const vec4 GRASS_COLOR_2 = vec4(vec3(56.0, 140.0, 28.0) / 255.0, 1.0);
-
-const vec4 MARSH_COLOR_1 = vec4(vec3(50.0, 64.0, 1.0) / 255.0, 1.0);
-const vec4 MARSH_COLOR_2 = vec4(vec3(70.0, 89.0, 2.0) / 255.0, 1.0);
-
-const vec4 ROCK_COLOR_1 = vec4(vec3(103.0, 70.0, 49.0) / 255.0, 1.0);
-const vec4 ROCK_COLOR_2 = vec4(vec3(94.0, 87.0, 82.0) / 255.0, 1.0);
-
-const vec4 SAND_COLOR_1 = vec4(vec3(237.0, 209.0, 127.0) / 255.0, 1.0);
-const vec4 SAND_COLOR_2 = vec4(vec3(255.0, 198.0, 57.0) / 255.0, 1.0);
-
-const vec4 WATER_COLOR_1 = vec4(vec3(25.0, 163.0, 167.0) / 255.0, 0.5);
-const vec4 WATER_COLOR_2 = vec4(vec3(16.0, 118.0, 141.0) / 255.0, 0.5);
-
-const vec4 FIRE_COLOR_1 = vec4(vec3(217.0, 63.0, 7.0) / 255.0, 1.0);
-const vec4 FIRE_COLOR_2 = vec4(vec3(242.0, 193.0, 102.0) / 255.0, 1.0);
-
-const vec4 RAINFOREST_COLOR_1 = vec4(vec3(81.0, 89.0, 0.0) / 255.0, 1.0);
-
-const vec4 SNOW_COLOR_1 = vec4(vec3(232.0, 232.0, 232.0) / 255.0, 1.0);
-
-float mountainStartRange = 0.325;
+const vec4 WATER_COLOR_1 = vec4(vec3(21.0, 92.0, 158.0) / 255.0, 0.65);
 
 // Was too lazy
 // Taken From: http://www.neilmendoza.com/glsl-rotation-about-an-arbitrary-axis/
@@ -312,97 +291,6 @@ mat4 rotationMatrix(vec3 axis, float angle) {
       oc * axis.y * axis.y + c, oc * axis.y * axis.z - axis.x * s, 0.0,
       oc * axis.z * axis.x - axis.y * s, oc * axis.y * axis.z + axis.x * s,
       oc * axis.z * axis.z + c, 0.0, 0.0, 0.0, 0.0, 1.0);
-}
-
-float rayConeIntersection(vec3 rayOrigin, vec3 rayDirection, vec3 coneTip,
-                          vec3 coneAxisVector, float coneAngleInDegrees) {
-  vec3 v = normalize(coneAxisVector);
-  float rads = coneAngleInDegrees * DEGREE_TO_RAD;
-  float cosAxisSq = cos(rads) * cos(rads);
-
-  vec3 co = rayOrigin - coneTip;
-
-  float dvDot = dot(rayDirection, v);
-  float covDot = dot(co, v);
-
-  float a = dvDot * dvDot - cosAxisSq;
-  float b = 2.0 * (dvDot * covDot - (dot(rayDirection, co) * cosAxisSq));
-  float c = covDot * covDot - (dot(co, co) * cosAxisSq);
-
-  float disc = pow(b, 2.0) - (4.0 * a * c);
-
-  if (disc < 0.0) {
-    return 0.0;
-  }
-
-  float t0 = (-1.0 * b - sqrt(disc)) / (2.0 * a);
-  float t1 = (-1.0 * b + sqrt(disc)) / (2.0 * a);
-
-  if (t0 > 0.0) {
-    return t0;
-  }
-
-  if (t1 > 0.0) {
-    return t1;
-  }
-
-  return 0.0;
-}
-
-bool drawVolcano(vec3 target, inout vec4 vertexPosition,
-                 inout vec4 vertexNormal, inout vec4 vertexColor) {
-  bool result = false;
-  vec3 vertexPositionVec3 = vertexPosition.xyz;
-  float dist = distance(target, vertexPositionVec3);
-
-  vec3 growthDir = normalize(target); // Icosphere at center
-
-  if (dist < 0.4) {
-    vec3 rayDirection = normalize(vertexPositionVec3 - target);
-    vec3 rayOrigin = vertexPositionVec3;
-
-    vec3 coneTip = target + (growthDir * 0.5);
-    vec3 coneAxisVector = normalize(target - coneTip);
-
-    float tValue = rayConeIntersection(rayOrigin, rayDirection, coneTip,
-                                       coneAxisVector, 10.0);
-
-    if (tValue > 0.1) {
-      tValue = 0.1;
-    }
-
-    float coneCenter =
-        dot(normalize(rayOrigin - coneTip), normalize(coneAxisVector));
-
-    if (tValue > 0.0) {
-      vec3 point = rayOrigin + (tValue * rayDirection);
-
-      vertexPosition = vec4(point, 1);
-      vertexNormal = vec4(normalize(point - target), 0);
-
-      vertexColor = ROCK_COLOR_2;
-      result = true;
-
-      vec3 df = calcNormal(vertexPosition.xyz * 513.6) * 0.15;
-      vertexNormal = normalize(vec4(df, 0) + vertexNormal);
-    }
-
-    if (coneCenter >= 1.0 - 0.001) {
-      vertexPosition = vec4(vertexPosition.xyz + (coneAxisVector * 0.1), 1.0);
-
-      float mixValue = mod(float(u_Time) * 0.05, 10.0);
-
-      if (mixValue >= 5.0) {
-        mixValue = (mixValue - 5.0) / 5.0;
-        vertexColor = mix(FIRE_COLOR_1, FIRE_COLOR_2, mixValue);
-      } else {
-        mixValue = mixValue / 5.0;
-        vertexColor = mix(FIRE_COLOR_2, FIRE_COLOR_1, mixValue);
-      }
-    }
-  }
-
-  return result;
 }
 
 void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
@@ -427,7 +315,7 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
 
   if (isWater) {
     noise = 0.0;
-    fs_Spec = 192.0;
+    fs_Spec = 256.0;
 
     fs_Valid = 0.0;
 
@@ -443,6 +331,8 @@ void main() {
   vec4 vertexColor;
   vec4 vertexPosition = vs_Pos;
   vec4 vertexNormal = vs_Nor;
+
+  fs_useMatcap = 0.0;
 
   float lightRadius = 10.0;
   lightPos.x = lightRadius * cos(float(u_Time) * 0.003);
