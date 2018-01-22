@@ -14,7 +14,7 @@ import ShaderProgram, { Shader } from './rendering/gl/ShaderProgram';
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 let controls = {
-  tesselations: 8,
+  tesselations: 9,
   loadPlanetSceneButton: loadPlanetScene,
   loadTestSceneButton: loadTestScene,
   saveImage: saveImage,
@@ -162,6 +162,7 @@ function main() {
   // This function will be called every frame
   function tick() {
     camera.update();
+    let position = camera.getPosition();
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
@@ -169,13 +170,13 @@ function main() {
     gl.disable(gl.DEPTH_TEST);
 
     skyShader.setTime(frameCount);
-    skyShader.setEyePosition(vec4.fromValues(camera.position[0], camera.position[1], camera.position[2], 1));
+    skyShader.setEyePosition(vec4.fromValues(position[0], position[1], position[2], 1));
     renderer.render(camera, skyShader, [sky]);
 
     gl.enable(gl.DEPTH_TEST);
 
     activeShader.setTime(frameCount);
-    activeShader.setEyePosition(vec4.fromValues(camera.position[0], camera.position[1], camera.position[2], 1));
+    activeShader.setEyePosition(vec4.fromValues(position[0], position[1], position[2], 1));
     renderer.setGeometryColor(
       vec4.fromValues(
         controls.geometryColor[0] / 255,
@@ -186,10 +187,11 @@ function main() {
     );
 
     waterShader.setTime(frameCount);
-    waterShader.setEyePosition(vec4.fromValues(camera.position[0], camera.position[1], camera.position[2], 1));
+    waterShader.setEyePosition(vec4.fromValues(position[0], position[1], position[2], 1));
 
     switch (shaderMode) {
       case 0:
+        activeShader.setEyePosition(vec4.fromValues(position[0], position[1], position[2], 1));
         renderer.render(camera, activeShader, [icosphere]);
         renderer.render(camera, waterShader, [icosphere]);
         break;

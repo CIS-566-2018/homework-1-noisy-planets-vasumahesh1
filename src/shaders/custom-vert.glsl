@@ -8,6 +8,8 @@ uniform mat4 u_ViewProj;
 
 uniform int u_Time;
 
+uniform vec4 u_Eye;
+
 in vec4 vs_Pos;
 
 in vec4 vs_Nor;
@@ -187,15 +189,6 @@ float fbm(vec3 x) {
   return (v + 1.0) / 2.0;
 }
 
-vec3 calcNormal(in vec3 pos) {
-  float eps = 0.5;
-  float f0 = fbm(pos);
-  float fx = fbm(pos + vec3(eps, 0, 0));
-  float fy = fbm(pos + vec3(0, eps, 0));
-  float fz = fbm(pos + vec3(0, 0, eps));
-  return normalize(vec3((fx - f0) / eps, (fy - f0) / eps, (fz - f0) / eps));
-}
-
 float hash1( float n )
 {
     return fract( n*17.0*fract( n*0.3183099 ) );
@@ -272,6 +265,16 @@ vec4 fbmad( in vec3 x, int octaves )
         m = f*m3i*m;
     }
     return vec4( a, d );
+}
+
+vec3 calcNormal(in vec3 pos) {
+  float eps = 0.5;
+  // float f0 = fbm(pos);
+  float fx = (fbmad(pos - vec3(eps, 0, 0), 8) - fbmad(pos + vec3(eps, 0, 0), 8)).x;
+  float fy = (fbmad(pos - vec3(0, eps, 0), 8) - fbmad(pos + vec3(0, eps, 0), 8)).x;
+  float fz = (fbmad(pos - vec3(0, 0, eps), 8) - fbmad(pos + vec3(0, 0, eps), 8)).x;
+  // return normalize(vec3((fx - f0) / eps, (fy - f0) / eps, (fz - f0) / eps));
+  return normalize(vec3(fx, fy, fz));
 }
 
 const vec4 GRASS_COLOR_1 = vec4(vec3(112.0, 166.0, 3.0) / 255.0, 1.0);
@@ -352,62 +355,6 @@ float rayConeIntersection(vec3 rayOrigin, vec3 rayDirection, vec3 coneTip,
   return 0.0;
 }
 
-bool drawVolcano(vec3 target, inout vec4 vertexPosition,
-                 inout vec4 vertexNormal, inout vec4 vertexColor) {
-  bool result = false;
-  vec3 vertexPositionVec3 = vertexPosition.xyz;
-  float dist = distance(target, vertexPositionVec3);
-
-  vec3 growthDir = normalize(target); // Icosphere at center
-
-  if (dist < 0.4) {
-    vec3 rayDirection = normalize(vertexPositionVec3 - target);
-    vec3 rayOrigin = vertexPositionVec3;
-
-    vec3 coneTip = target + (growthDir * 0.5);
-    vec3 coneAxisVector = normalize(target - coneTip);
-
-    float tValue = rayConeIntersection(rayOrigin, rayDirection, coneTip,
-                                       coneAxisVector, 10.0);
-
-    if (tValue > 0.1) {
-      tValue = 0.1;
-    }
-
-    float coneCenter =
-        dot(normalize(rayOrigin - coneTip), normalize(coneAxisVector));
-
-    if (tValue > 0.0) {
-      vec3 point = rayOrigin + (tValue * rayDirection);
-
-      vertexPosition = vec4(point, 1);
-      vertexNormal = vec4(normalize(point - target), 0);
-
-      vertexColor = ROCK_COLOR_2;
-      result = true;
-
-      vec3 df = calcNormal(vertexPosition.xyz * 513.6) * 0.15;
-      vertexNormal = normalize(vec4(df, 0) + vertexNormal);
-    }
-
-    if (coneCenter >= 1.0 - 0.001) {
-      vertexPosition = vec4(vertexPosition.xyz + (coneAxisVector * 0.1), 1.0);
-
-      float mixValue = mod(float(u_Time) * 0.05, 10.0);
-
-      if (mixValue >= 5.0) {
-        mixValue = (mixValue - 5.0) / 5.0;
-        vertexColor = mix(FIRE_COLOR_1, FIRE_COLOR_2, mixValue);
-      } else {
-        mixValue = mixValue / 5.0;
-        vertexColor = mix(FIRE_COLOR_2, FIRE_COLOR_1, mixValue);
-      }
-    }
-  }
-
-  return result;
-}
-
 void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
                   inout vec4 vertexColor, bool isNight) {
   vertexColor = WATER_COLOR_1;
@@ -425,12 +372,13 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
   float deepWaterThreshold = waterThreshold - 0.15;
   float maxScale = 1.0;
 
-  vec4 noiseAd = fbmad(noiseInput, 8);
+  float dist = length(vertexPosition.xyz - u_Eye.xyz);
+  int LOD = int(8.0 * (1.0 - smoothstep(0.0, 2.5, log(dist)))) + 4;
+  vec4 noiseAd = fbmad(noiseInput, LOD);
   float noise = noiseAd.x;
   vec3 derivative = noiseAd.yzw;
 
-  noiseInput = vertexPosition.xyz * 0.532;
-  float rainfallNoise = fbm(noiseInput);
+  // vec3 normal2 = calcNormal(noiseInput);
 
   float originalNoise = noise;
 
@@ -442,6 +390,8 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
   if (isWater) {
     vertexColor = BEDROCK_COLOR_1;
     vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseAd.yzw * 0.5)), 0);
+    // vertexNormal = vec4(normalize(vertexNormal.xyz - (normal2 * 0.5)), 0);
+    // vertexNormal = vec4(normalize(vertexNormal.xyz - normal2), 0);
 
     if (noise < deepWaterThreshold) {
       vertexColor = BEDROCK_COLOR_2;

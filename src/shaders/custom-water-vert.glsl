@@ -434,7 +434,7 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
     noiseInput = vertexPosition.xyz * 3.0 + vec3(float(u_Time) * 0.0008);
     vec4 noiseWaves = fbmad(noiseInput, 8);
 
-    vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseWaves.yzw * 0.15)), 0);
+    vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseWaves.yzw * 0.2)), 0);
 
   }
 }

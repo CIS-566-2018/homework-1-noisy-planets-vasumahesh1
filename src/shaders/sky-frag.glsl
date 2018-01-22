@@ -13,13 +13,16 @@ precision highp float;
 
 
 uniform vec4 u_Eye;
-uniform vec4 u_Time;
+uniform int u_Time;
 
 uniform ivec2 u_Dimensions;
 uniform mat4 u_InvViewProj;
 
-
 out vec4 out_Col;
+
+
+const float PI = 3.14159265359;
+const float TWO_PI = 6.28318530718;
 
 //  Classic Perlin 3D Noise
 //  by Stefan Gustavson
@@ -111,6 +114,21 @@ float fbm(vec3 x) {
   return v;
 }
 
+void addMeteor(vec2 uv, inout vec4 targetColor, float startX, float lengthX, float trailLength, float trailWidth, float timeSalt) {
+  // Meteor Shower
+  // y = 1-x^2
+  float x = (uv.x - startX) / lengthX;
+  float y = 1.0 - (x * x);
+
+  float time = float(u_Time) * 0.5;
+
+  float val = fract(time * timeSalt);
+
+  if (x < val && x > val - trailLength && y <= uv.y + trailWidth && y >= uv.y - trailWidth) {
+    targetColor = vec4(1.0f, 1.0f , 1.0f, 1.0f);
+  }
+}
+
 vec4 getNightColor(vec3 rayDir) {
   float noise = fbm(rayDir * 237.5);
 
@@ -123,6 +141,17 @@ vec4 getNightColor(vec3 rayDir) {
   return color;
 }
 
+vec2 sphereToUV(vec3 p)
+{
+    float phi = atan(p.z, p.x); // Returns atan(z/x)
+    if(phi < 0.0)
+    {
+        phi += TWO_PI; // [0, TWO_PI] range now
+    }
+
+    float theta = acos(p.y); // [0, PI]
+    return vec2(1.0 - phi / TWO_PI, 1.0 - theta / PI);
+}
 
 void main()
 {
@@ -137,7 +166,15 @@ void main()
   // Ray from Camera to Far Plane World Point
   vec3 rayDir = normalize(worldSpacePoint.xyz - u_Eye.xyz);
 
-  vec4 nightColor = getNightColor(rayDir);
+  vec2 uv = sphereToUV(rayDir);
 
-  out_Col = nightColor;
+  vec4 targetColor = getNightColor(rayDir);
+
+  addMeteor(uv, targetColor, 0.7f, 0.1f, 0.01f, 0.0005f, 0.008);
+  addMeteor(uv, targetColor, 0.6f, 0.075f, 0.01f, 0.0005f, 0.00462);
+  addMeteor(uv, targetColor, 0.3f, 0.05f, 0.01f, 0.0005f, 0.003423);
+  addMeteor(uv, targetColor, 0.4f, 0.1f, 0.01f, 0.0005f, 0.003462);
+  addMeteor(uv, targetColor, 0.1f, 0.1f, 0.01f, 0.0005f, 0.008852);
+
+  out_Col = targetColor;
 }

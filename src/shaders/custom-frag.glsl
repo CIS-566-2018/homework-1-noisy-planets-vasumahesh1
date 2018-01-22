@@ -61,7 +61,7 @@ void main()
     vec4 lightVec = fs_LightVec - fs_Pos;
 
     vec4 H = normalize((viewVec + lightVec) / 2.0f);
-    specularTerm = pow(max(0.0, dot(normalize(viewVec), reflect(normalize(fs_LightVec), normalize(fs_Nor)))), fs_Spec);
+    specularTerm = max(pow(dot(H, normalize(fs_Nor)), fs_Spec), 0.0);
   }
 
   float lightIntensity = ambientTerm + (diffuseTerm + specularTerm) * lightFactor;
