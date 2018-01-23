@@ -31,11 +31,11 @@ I render my water in a second draw call. This allows me to give water some opaci
 
 ### LOD
 
-Implemented LOD feature as described in the [paper](https://static1.squarespace.com/static/58a1bc3c3e00be6bfe6c228c/t/58a4d25146c3c4233fb15cc2/1487196929690/ImplicitProceduralPlanetGeneration-Report.pdf). By using the distance as an input, I change the octaves to render in my noise.
+Implemented LOD feature as described in the [paper](https://static1.squarespace.com/static/58a1bc3c3e00be6bfe6c228c/t/58a4d25146c3c4233fb15cc2/1487196929690/ImplicitProceduralPlanetGeneration-Report.pdf). By using the distance as an input, I change the octaves to generate in my noise.
 
-![](images/lod_1.png =150x)
-![](images/lod_2.png =150x)
-![](images/lod_3.png =150x)
+![](images/lod_1.png)
+![](images/lod_2.png)
+![](images/lod_3.png)
 
 
 ### Colors
