@@ -16,6 +16,7 @@ uniform vec4 u_Eye;
 uniform sampler2D u_Texture;
 uniform sampler2D u_Texture1;
 uniform sampler2D u_Texture2;
+uniform sampler2D u_Texture3;
 // These are the interpolated values out of the rasterizer, so you can't know
 // their specific values without knowing the vertices that contributed to them
 in vec4 fs_Nor;
@@ -54,7 +55,11 @@ void main()
   vec4 diffuseColor = fs_Col;
   float alpha = diffuseColor.a;;
 
-  if (fs_useMatcap > 2.0) {
+  if (fs_useMatcap > 3.0) {
+    vec2 coords = vec2((fs_Nor.x + 1.0) / 2.0, (fs_Nor.y + 1.0) / 2.0);
+    diffuseColor = texture(u_Texture3, coords);
+    alpha = 1.0;
+  } else if (fs_useMatcap > 2.0) {
     vec2 coords = vec2((fs_Nor.x + 1.0) / 2.0, (fs_Nor.y + 1.0) / 2.0);
     diffuseColor = texture(u_Texture2, coords);
     alpha = 1.0;

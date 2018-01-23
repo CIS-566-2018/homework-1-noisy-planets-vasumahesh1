@@ -10,6 +10,17 @@ uniform int u_Time;
 
 uniform vec4 u_Eye;
 
+
+// Controls
+uniform vec3 u_ControlsWaterBedrock1Color;
+uniform vec3 u_ControlsWaterBedrock2Color;
+uniform vec3 u_ControlsSandColor;
+uniform float u_ControlsWaterLevel;
+uniform float u_ControlsShoreLevel;
+uniform float u_ControlsElevation;
+uniform float u_ControlsNoiseScale;
+
+
 in vec4 vs_Pos;
 
 in vec4 vs_Nor;
@@ -281,14 +292,8 @@ vec3 calcNormal(in vec3 pos) {
 const vec4 GRASS_COLOR_1 = vec4(vec3(112.0, 166.0, 3.0) / 255.0, 1.0);
 const vec4 GRASS_COLOR_2 = vec4(vec3(56.0, 140.0, 28.0) / 255.0, 1.0);
 
-const vec4 MARSH_COLOR_1 = vec4(vec3(50.0, 64.0, 1.0) / 255.0, 1.0);
-const vec4 MARSH_COLOR_2 = vec4(vec3(70.0, 89.0, 2.0) / 255.0, 1.0);
-
 const vec4 ROCK_COLOR_1 = vec4(vec3(103.0, 70.0, 49.0) / 255.0, 1.0);
 const vec4 ROCK_COLOR_2 = vec4(vec3(94.0, 87.0, 82.0) / 255.0, 1.0);
-
-const vec4 SAND_COLOR_1 = vec4(vec3(237.0, 209.0, 127.0) / 255.0, 1.0);
-const vec4 SAND_COLOR_2 = vec4(vec3(255.0, 198.0, 57.0) / 255.0, 1.0);
 
 const vec4 WATER_COLOR_1 = vec4(vec3(107.0, 137.0, 186.0) / 255.0, 1.0);
 const vec4 WATER_COLOR_2 = vec4(vec3(87.0, 112.0, 163.0) / 255.0, 1.0);
@@ -299,9 +304,6 @@ const vec4 FIRE_COLOR_2 = vec4(vec3(242.0, 193.0, 102.0) / 255.0, 1.0);
 const vec4 RAINFOREST_COLOR_1 = vec4(vec3(81.0, 89.0, 0.0) / 255.0, 1.0);
 
 const vec4 SNOW_COLOR_1 = vec4(vec3(232.0, 232.0, 232.0) / 255.0, 1.0);
-
-const vec4 BEDROCK_COLOR_1 = vec4(vec3(68.0, 85.0, 102.0) / 255.0, 1.0);
-const vec4 BEDROCK_COLOR_2 = vec4(vec3(34.0, 43.0, 51.0) / 255.0, 1.0);
 
 float mountainStartRange = 0.325;
 
@@ -362,14 +364,22 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
 
   fs_Valid = 0.0;
 
+  /*----------  Uniform Control Variables  ----------*/
+  float waterThreshold = u_ControlsWaterLevel - 0.5;
+  vec4 bedrockColor1 = vec4(u_ControlsWaterBedrock1Color, 1.0);
+  vec4 bedrockColor2 = vec4(u_ControlsWaterBedrock2Color, 1.0);
+  vec4 sandColor = vec4(u_ControlsSandColor, 1.0);
+  float shoreLevel = (u_ControlsShoreLevel / 0.5) * 0.04;
+  float elevation = (0.5 / u_ControlsElevation) * 4.0;
+  float noiseScale = (u_ControlsNoiseScale / 0.5) * 3.0;
+  /*----------  End  ----------*/
+
   vec4 originalPosition = vertexPosition;
   vec4 originalNormal = vertexNormal;
 
   fs_SphereNor = originalNormal;
 
-  vec3 noiseInput = vertexPosition.xyz * 3.0;
-
-  float waterThreshold = 0.0;
+  vec3 noiseInput = vertexPosition.xyz * noiseScale;
   float deepWaterThreshold = waterThreshold - 0.15;
   float maxScale = 1.0;
 
@@ -379,8 +389,6 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
   float noise = noiseAd.x;
   vec3 derivative = noiseAd.yzw;
 
-  // vec3 normal2 = calcNormal(noiseInput);
-
   float originalNoise = noise;
 
   bool isWater = noise < waterThreshold ? true : false;
@@ -389,33 +397,30 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
   bool isCoast = false;
 
   if (isWater) {
-    vertexColor = BEDROCK_COLOR_1;
+    vertexColor = bedrockColor1;
     vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseAd.yzw * 0.5)), 0);
-    // vertexNormal = vec4(normalize(vertexNormal.xyz - (normal2 * 0.5)), 0);
-    // vertexNormal = vec4(normalize(vertexNormal.xyz - normal2), 0);
 
     if (noise < deepWaterThreshold) {
-      vertexColor = BEDROCK_COLOR_2;
+      vertexColor = bedrockColor2;
     }
   } else {
-  
-    vertexColor = GRASS_COLOR_1;
-
     fs_Spec = 0.0;
+    // Grass 1
     fs_useMatcap = 1.0;
 
-    if (noise < 0.04) {
-      vertexColor = SAND_COLOR_1;
+    if (noise < waterThreshold + shoreLevel) {
+      vertexColor = sandColor;
       fs_Spec = 2.0;
       isCoast = true;
       fs_useMatcap = 0.0;
-    } else if (noise > 0.15) {
-      vertexColor = GRASS_COLOR_2;
+    } else if (noise > waterThreshold + 0.15) {
+      // Grass 2
+      fs_useMatcap = 4.0;
     }
   }
 
   float landNoise = noise;
-  float landHeight = landNoise / 4.0;
+  float landHeight = landNoise / elevation;
   vertexPosition = originalPosition + (originalNormal * landHeight);
 
   vec4 landPosition = vertexPosition;
@@ -423,7 +428,7 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
   if (isGrass) {
     vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseAd.yzw * 0.36)), 0);
 
-    if (landNoise > 0.3) {
+    if (landNoise > waterThreshold + 0.3) {
       vertexColor = ROCK_COLOR_1;
       fs_useMatcap = 2.0;
 
@@ -431,72 +436,13 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
 
       vertexNormal = vec4(normalize(originalNormal.xyz - (noiseAd.yzw * 0.45)), 0);
 
-      if (landNoise > 0.4 && snowAppearance > 0.5) {
+      if (landNoise > waterThreshold + 0.4 && snowAppearance > 0.5) {
         fs_useMatcap = 3.0;
         vertexColor = SNOW_COLOR_1;
         fs_Spec = 128.0;
       }
     }
-    // else if (rainfallNoise > 0.2 && landNoise < 0.1) {
-    //   vertexColor = MARSH_COLOR_1;
-
-    //   noiseInput = vertexPosition.xyz * 23.7;
-    //   float riverNoise = abs(fbm(noiseInput));
-
-    //   if (riverNoise > 0.2) {
-    //     float height = -0.02;
-    //     vertexPosition = vertexPosition + (vertexNormal * height);
-    //     vertexColor = WATER_COLOR_1;
-    //   } else if (riverNoise > 0.25) {
-    //     vertexColor = MARSH_COLOR_2;
-    //   }
-    // } else if (rainfallNoise > 0.2) {
-    //   vertexColor = RAINFOREST_COLOR_1;
-    // } else if (rainfallNoise < -0.4 && landNoise < 0.1) {
-    //   vertexColor = SAND_COLOR_2;
-    //   vec3 df = calcNormal(vertexPosition.xyz * 237.6) * 0.25;
-    //   vertexNormal = normalize(vec4(df, 0) + vertexNormal);
-    // } else {
-    //   // Just grass
-    //   vec3 df = calcNormal(vertexPosition.xyz * 137.6) * 0.05;
-    //   vertexNormal = normalize(vec4(df, 0) + vertexNormal);
-    // }
-
   }
-
-  // vec4 pos = landPosition;
-  // vec4 normal = originalNormal;
-  // bool isDirty = false;
-  // bool result = false;
-
-  // vec4 volcanoCenter;
-
-  // if (!isDirty) {
-  //   volcanoCenter = rotationMatrix(vec3(1, 0, 0), -25.0 * DEGREE_TO_RAD) * vec4(0, 0.9, 0, 1);
-  //   result = drawVolcano(vec3(volcanoCenter), pos, normal, vertexColor);
-  // }
-
-  // if (result && !isDirty) {
-  //   vertexPosition = pos;
-  //   vertexNormal = normal;
-  //   isDirty = true;
-  // }
-
-  // if (!isDirty) {
-  //   volcanoCenter = rotationMatrix(vec3(0, 1, 0), -80.0 * DEGREE_TO_RAD) * rotationMatrix(vec3(1, 0, 0), -100.0 * DEGREE_TO_RAD) * vec4(0, 0.9, 0, 1);
-  //   result = drawVolcano(vec3(volcanoCenter), pos, normal, vertexColor);
-  // }
-
-  // if (result && !isDirty) {
-  //   vertexPosition = pos;
-  //   vertexNormal = normal;
-  //   isDirty = true;
-  // }
-
-  // if (noise > 0.1) {
-  //   vec3 df = calcNormal(vertexPosition.xyz);
-  //   vertexNormal = vec4(normalize(vertexNormal.xyz - df), 0);
-  // }
 }
 
 void main() {

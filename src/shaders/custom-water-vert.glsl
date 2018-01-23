@@ -8,6 +8,12 @@ uniform mat4 u_ViewProj;
 
 uniform int u_Time;
 
+uniform vec3 u_ControlsWaterColor;
+uniform float u_ControlsWaterOpacity;
+uniform float u_ControlsWaterLevel;
+uniform float u_ControlsElevation;
+uniform float u_ControlsNoiseScale;
+
 in vec4 vs_Pos;
 
 in vec4 vs_Nor;
@@ -275,8 +281,6 @@ vec4 fbmad( in vec3 x, int octaves )
     return vec4( a, d );
 }
 
-const vec4 WATER_COLOR_1 = vec4(vec3(21.0, 92.0, 158.0) / 255.0, 0.65);
-
 // Was too lazy
 // Taken From: http://www.neilmendoza.com/glsl-rotation-about-an-arbitrary-axis/
 mat4 rotationMatrix(vec3 axis, float angle) {
@@ -295,7 +299,12 @@ mat4 rotationMatrix(vec3 axis, float angle) {
 
 void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
                   inout vec4 vertexColor, bool isNight) {
-  vertexColor = WATER_COLOR_1;
+
+  vec4 waterColor = vec4(u_ControlsWaterColor, u_ControlsWaterOpacity);
+  float elevation = (0.5 / u_ControlsElevation) * 4.0;
+  float noiseScale = (u_ControlsNoiseScale / 0.5) * 3.0;
+
+  vertexColor = waterColor;
 
   fs_Valid = 1.0;
 
@@ -304,9 +313,9 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
 
   fs_SphereNor = originalNormal;
 
-  vec3 noiseInput = vertexPosition.xyz * 3.0;
+  vec3 noiseInput = vertexPosition.xyz * noiseScale;
 
-  float waterThreshold = 0.0;
+  float waterThreshold = u_ControlsWaterLevel - 0.5;
 
   vec4 noiseAd = fbmad(noiseInput, 8);
   float noise = noiseAd.x;
@@ -314,16 +323,17 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
   bool isWater = noise < waterThreshold ? true : false;
 
   if (isWater) {
-    noise = 0.0;
     fs_Spec = 256.0;
 
     fs_Valid = 0.0;
 
+    float landHeight = waterThreshold / elevation;
+    vertexPosition = originalPosition + (originalNormal * landHeight);
+
     noiseInput = vertexPosition.xyz * 3.0 + vec3(float(u_Time) * 0.0008);
     vec4 noiseWaves = fbmad(noiseInput, 8);
 
-    vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseWaves.yzw * 0.2)), 0);
-
+    vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseWaves.yzw * 0.3)), 0);
   }
 }
 

@@ -1,6 +1,7 @@
-import { vec4, mat4, vec2 } from 'gl-matrix';
+import { vec4, mat4, vec2, vec3 } from 'gl-matrix';
 import Drawable from './Drawable';
 import { gl } from '../../globals';
+import { ShaderControls, WaterControls } from './ShaderControls';
 
 var activeProgram: WebGLProgram = null;
 
@@ -34,8 +35,21 @@ class ShaderProgram {
   unifTexture: WebGLUniformLocation;
   unifTexture1: WebGLUniformLocation;
   unifTexture2: WebGLUniformLocation;
+  unifTexture3: WebGLUniformLocation;
   unifDimensions: WebGLUniformLocation;
   unifInvViewProj: WebGLUniformLocation;
+
+  unifControlsWaterOpacity: WebGLUniformLocation;
+  unifControlsWaterColor: WebGLUniformLocation;
+  unifControlsWaterLevel: WebGLUniformLocation;
+
+
+  unifControlsWaterBedrock1Color: WebGLUniformLocation;
+  unifControlsWaterBedrock2Color: WebGLUniformLocation;
+  unifControlsShoreLevel: WebGLUniformLocation;
+  unifControlsSandColor: WebGLUniformLocation;
+  unifControlsElevation: WebGLUniformLocation;
+  unifControlsNoiseScale: WebGLUniformLocation;
 
   constructor(shaders: Array<Shader>) {
     this.prog = gl.createProgram();
@@ -61,7 +75,19 @@ class ShaderProgram {
     this.unifTexture = gl.getUniformLocation(this.prog, "u_Texture");
     this.unifTexture1 = gl.getUniformLocation(this.prog, "u_Texture1");
     this.unifTexture2 = gl.getUniformLocation(this.prog, "u_Texture2");
+    this.unifTexture3 = gl.getUniformLocation(this.prog, "u_Texture3");
     this.unifDimensions = gl.getUniformLocation(this.prog, "u_Dimensions");
+
+    this.unifControlsWaterOpacity = gl.getUniformLocation(this.prog, "u_ControlsWaterOpacity");
+    this.unifControlsWaterColor = gl.getUniformLocation(this.prog, "u_ControlsWaterColor");
+    this.unifControlsWaterLevel = gl.getUniformLocation(this.prog, "u_ControlsWaterLevel");
+
+    this.unifControlsWaterBedrock1Color = gl.getUniformLocation(this.prog, "u_ControlsWaterBedrock1Color");
+    this.unifControlsWaterBedrock2Color = gl.getUniformLocation(this.prog, "u_ControlsWaterBedrock2Color");
+    this.unifControlsShoreLevel = gl.getUniformLocation(this.prog, "u_ControlsShoreLevel");
+    this.unifControlsSandColor = gl.getUniformLocation(this.prog, "u_ControlsSandColor");
+    this.unifControlsElevation = gl.getUniformLocation(this.prog, "u_ControlsElevation");
+    this.unifControlsNoiseScale = gl.getUniformLocation(this.prog, "u_ControlsNoiseScale");
   }
 
   use() {
@@ -197,6 +223,56 @@ class ShaderProgram {
       gl.uniform1i(this.unifTexture1, 1);
     }  else if (this.unifTexture2 !== -1 && slot == 2) {
       gl.uniform1i(this.unifTexture2, 2);
+    }  else if (this.unifTexture3 !== -1 && slot == 3) {
+      gl.uniform1i(this.unifTexture3, 3);
+    }
+  }
+
+  setControlValues(controls: ShaderControls) {
+    this.use();
+
+    if (this.unifControlsWaterOpacity !== -1) {
+      gl.uniform1f(this.unifControlsWaterOpacity, controls.waterControls.opacity);
+    }
+
+    if (this.unifControlsWaterLevel !== -1) {
+      gl.uniform1f(this.unifControlsWaterLevel, controls.waterControls.level);
+    }
+
+    if (this.unifControlsShoreLevel !== -1) {
+      gl.uniform1f(this.unifControlsShoreLevel, controls.shoreLevel);
+    }
+
+    if (this.unifControlsElevation !== -1) {
+      gl.uniform1f(this.unifControlsElevation, controls.elevation);
+    }
+
+    if (this.unifControlsNoiseScale !== -1) {
+      gl.uniform1f(this.unifControlsNoiseScale, controls.noiseScale);
+    }
+
+    if (this.unifControlsWaterColor !== -1) {
+      let color = vec3.fromValues(controls.waterControls.color[0], controls.waterControls.color[1], controls.waterControls.color[2]);
+      vec3.scale(color, color, 1 / 255.0);
+      gl.uniform3fv(this.unifControlsWaterColor, color);
+    }
+
+    if (this.unifControlsWaterBedrock1Color !== -1) {
+      let color = vec3.fromValues(controls.bedrock1Color[0], controls.bedrock1Color[1], controls.bedrock1Color[2]);
+      vec3.scale(color, color, 1 / 255.0);
+      gl.uniform3fv(this.unifControlsWaterBedrock1Color, color);
+    }
+
+    if (this.unifControlsWaterBedrock2Color !== -1) {
+      let color = vec3.fromValues(controls.bedrock2Color[0], controls.bedrock2Color[1], controls.bedrock2Color[2]);
+      vec3.scale(color, color, 1 / 255.0);
+      gl.uniform3fv(this.unifControlsWaterBedrock2Color, color);
+    }
+
+    if (this.unifControlsSandColor !== -1) {
+      let color = vec3.fromValues(controls.sandColor[0], controls.sandColor[1], controls.sandColor[2]);
+      vec3.scale(color, color, 1 / 255.0);
+      gl.uniform3fv(this.unifControlsSandColor, color);
     }
   }
 

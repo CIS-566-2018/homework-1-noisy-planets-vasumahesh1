@@ -1,4 +1,4 @@
-import {mat4, vec4, vec2} from 'gl-matrix';
+import {mat4, vec4, vec2, vec3} from 'gl-matrix';
 import Drawable from './Drawable';
 import Camera from '../../Camera';
 import {gl} from '../../globals';
@@ -31,6 +31,7 @@ class OpenGLRenderer {
 
   render(camera: Camera, prog: ShaderProgram, drawables: Array<Drawable>) {
     let model = mat4.create();
+    let rotDelta = mat4.create();
     let viewProj = mat4.create();
 
     let invViewProj = mat4.create();

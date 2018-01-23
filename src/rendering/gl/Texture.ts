@@ -85,6 +85,10 @@ export class Texture {
         slotType = gl.TEXTURE3;
         break;
 
+      case 4:
+        slotType = gl.TEXTURE4;
+        break;
+
       default:
         slotType = gl.TEXTURE0;
         break;
