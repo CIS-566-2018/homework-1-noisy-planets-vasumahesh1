@@ -68,6 +68,69 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__gl_matrix_common__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__gl_matrix_mat2__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gl_matrix_mat2d__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__gl_matrix_mat3__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__gl_matrix_mat4__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__gl_matrix_quat__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__gl_matrix_vec2__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__gl_matrix_vec3__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__gl_matrix_vec4__ = __webpack_require__(9);
+/* unused harmony reexport glMatrix */
+/* unused harmony reexport mat2 */
+/* unused harmony reexport mat2d */
+/* unused harmony reexport mat3 */
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_4__gl_matrix_mat4__; });
+/* unused harmony reexport quat */
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_6__gl_matrix_vec2__; });
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_7__gl_matrix_vec3__; });
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_8__gl_matrix_vec4__; });
+/**
+ * @fileoverview gl-matrix - High performance matrix and vector operations
+ * @author Brandon Jones
+ * @author Colin MacKenzie IV
+ * @version 2.4.0
+ */
+
+/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE. */
+// END HEADER
+
+
+
+
+
+
+
+
+
+
+
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ARRAY_TYPE; });
 /* unused harmony export setMatrixArrayType */
 /* unused harmony export toRadian */
@@ -141,7 +204,7 @@ function equals(a, b) {
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -154,114 +217,54 @@ function setGL(_gl) {
 
 
 /***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__gl_matrix_common__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__gl_matrix_mat2__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gl_matrix_mat2d__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__gl_matrix_mat3__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__gl_matrix_mat4__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__gl_matrix_quat__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__gl_matrix_vec2__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__gl_matrix_vec3__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__gl_matrix_vec4__ = __webpack_require__(9);
-/* unused harmony reexport glMatrix */
-/* unused harmony reexport mat2 */
-/* unused harmony reexport mat2d */
-/* unused harmony reexport mat3 */
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_4__gl_matrix_mat4__; });
-/* unused harmony reexport quat */
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_6__gl_matrix_vec2__; });
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_7__gl_matrix_vec3__; });
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_8__gl_matrix_vec4__; });
-/**
- * @fileoverview gl-matrix - High performance matrix and vector operations
- * @author Brandon Jones
- * @author Colin MacKenzie IV
- * @version 2.4.0
- */
-
-/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-// END HEADER
-
-
-
-
-
-
-
-
-
-
-
-
-
-/***/ }),
 /* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__globals__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__globals__ = __webpack_require__(2);
+
 
 class Drawable {
     constructor() {
         this.count = 0;
+        this.modelMatrix = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["a" /* mat4 */].create();
         this.idxBound = false;
         this.posBound = false;
         this.norBound = false;
     }
     destory() {
-        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].deleteBuffer(this.bufIdx);
-        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].deleteBuffer(this.bufPos);
-        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].deleteBuffer(this.bufNor);
+        __WEBPACK_IMPORTED_MODULE_1__globals__["a" /* gl */].deleteBuffer(this.bufIdx);
+        __WEBPACK_IMPORTED_MODULE_1__globals__["a" /* gl */].deleteBuffer(this.bufPos);
+        __WEBPACK_IMPORTED_MODULE_1__globals__["a" /* gl */].deleteBuffer(this.bufNor);
     }
     generateIdx() {
         this.idxBound = true;
-        this.bufIdx = __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].createBuffer();
+        this.bufIdx = __WEBPACK_IMPORTED_MODULE_1__globals__["a" /* gl */].createBuffer();
     }
     generatePos() {
         this.posBound = true;
-        this.bufPos = __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].createBuffer();
+        this.bufPos = __WEBPACK_IMPORTED_MODULE_1__globals__["a" /* gl */].createBuffer();
     }
     generateNor() {
         this.norBound = true;
-        this.bufNor = __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].createBuffer();
+        this.bufNor = __WEBPACK_IMPORTED_MODULE_1__globals__["a" /* gl */].createBuffer();
     }
     bindIdx() {
         if (this.idxBound) {
-            __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].bindBuffer(__WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].ELEMENT_ARRAY_BUFFER, this.bufIdx);
+            __WEBPACK_IMPORTED_MODULE_1__globals__["a" /* gl */].bindBuffer(__WEBPACK_IMPORTED_MODULE_1__globals__["a" /* gl */].ELEMENT_ARRAY_BUFFER, this.bufIdx);
         }
         return this.idxBound;
     }
     bindPos() {
         if (this.posBound) {
-            __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].bindBuffer(__WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].ARRAY_BUFFER, this.bufPos);
+            __WEBPACK_IMPORTED_MODULE_1__globals__["a" /* gl */].bindBuffer(__WEBPACK_IMPORTED_MODULE_1__globals__["a" /* gl */].ARRAY_BUFFER, this.bufPos);
         }
         return this.posBound;
     }
     bindNor() {
         if (this.norBound) {
-            __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].bindBuffer(__WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].ARRAY_BUFFER, this.bufNor);
+            __WEBPACK_IMPORTED_MODULE_1__globals__["a" /* gl */].bindBuffer(__WEBPACK_IMPORTED_MODULE_1__globals__["a" /* gl */].ARRAY_BUFFER, this.bufNor);
         }
         return this.norBound;
     }
@@ -269,7 +272,7 @@ class Drawable {
         return this.count;
     }
     drawMode() {
-        return __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].TRIANGLES;
+        return __WEBPACK_IMPORTED_MODULE_1__globals__["a" /* gl */].TRIANGLES;
     }
 }
 ;
@@ -405,7 +408,7 @@ module.exports = "#version 300 es\n\nprecision highp float;\n\nuniform vec4 u_Ey
 /* unused harmony export multiplyScalarAndAdd */
 /* unused harmony export exactEquals */
 /* unused harmony export equals */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(1);
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -1222,7 +1225,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["str"] = str;
 /* harmony export (immutable) */ __webpack_exports__["exactEquals"] = exactEquals;
 /* harmony export (immutable) */ __webpack_exports__["equals"] = equals;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(1);
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -2054,7 +2057,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["str"] = str;
 /* harmony export (immutable) */ __webpack_exports__["exactEquals"] = exactEquals;
 /* harmony export (immutable) */ __webpack_exports__["equals"] = equals;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(1);
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -3364,7 +3367,7 @@ function determinant(a) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_stats_js__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_stats_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_stats_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_dat_gui__ = __webpack_require__(27);
@@ -3376,7 +3379,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__rendering_gl_OpenGLRenderer__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__Camera__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__globals__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__globals__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__rendering_gl_ShaderControls__ = __webpack_require__(69);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__rendering_gl_ShaderProgram__ = __webpack_require__(70);
 
@@ -3404,6 +3407,8 @@ let controls = {
         opacity: 0.65
     }
 };
+let prevTime;
+let degreePerMS = -5.0 / 1000.0;
 let icosphere;
 let square;
 let cube;
@@ -3433,6 +3438,7 @@ function loadPlanetScene() {
     grassDarkTexture = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/textures/planet1/foliage_dark.png');
     mountainTexture = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/textures/planet1/mountain.jpg');
     snowTexture = new __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__["a" /* default */]('./src/textures/planet1/snow.png');
+    __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["a" /* mat4 */].identity(icosphere.modelMatrix);
 }
 function loadRedPlanetScene() {
     shaderControls.reset();
@@ -3447,6 +3453,7 @@ function loadRedPlanetScene() {
     shaderControls.elevation = 1.23;
     shaderControls.shoreLevel = 0.37;
     shaderControls.noiseScale = 0.81;
+    __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["a" /* mat4 */].identity(icosphere.modelMatrix);
 }
 function loadTestScene() {
     activeShader = testShader;
@@ -3550,6 +3557,11 @@ function main() {
     loadPlanetScene();
     // This function will be called every frame
     function tick() {
+        let deltaTime = (new Date()).getTime() - prevTime;
+        let degrees = deltaTime * degreePerMS;
+        let rotDelta = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["a" /* mat4 */].create();
+        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["a" /* mat4 */].fromRotation(rotDelta, degrees * 0.0174533, __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 1, 0));
+        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["a" /* mat4 */].multiply(icosphere.modelMatrix, icosphere.modelMatrix, rotDelta);
         camera.update();
         let position = camera.getPosition();
         stats.begin();
@@ -3592,6 +3604,7 @@ function main() {
             downloadImage();
             shouldCapture = false;
         }
+        prevTime = (new Date()).getTime();
         // Tell the browser to call `tick` again whenever it renders a new frame
         requestAnimationFrame(tick);
     }
@@ -3604,6 +3617,7 @@ function main() {
     camera.setAspectRatio(window.innerWidth / window.innerHeight);
     camera.updateProjectionMatrix();
     // Start the render loop
+    prevTime = (new Date()).getTime();
     tick();
 }
 main();
@@ -3638,7 +3652,7 @@ main();
 /* unused harmony export equals */
 /* unused harmony export multiplyScalar */
 /* unused harmony export multiplyScalarAndAdd */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(1);
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -4106,7 +4120,7 @@ const sub = subtract;
 /* unused harmony export multiplyScalarAndAdd */
 /* unused harmony export exactEquals */
 /* unused harmony export equals */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(1);
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -4629,7 +4643,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["multiplyScalarAndAdd"] = multiplyScalarAndAdd;
 /* harmony export (immutable) */ __webpack_exports__["exactEquals"] = exactEquals;
 /* harmony export (immutable) */ __webpack_exports__["equals"] = equals;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(1);
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -6337,7 +6351,7 @@ const sub = subtract;
 /* unused harmony export fromMat3 */
 /* unused harmony export fromEuler */
 /* unused harmony export str */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mat3__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__vec3__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__vec4__ = __webpack_require__(9);
@@ -7047,7 +7061,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["str"] = str;
 /* harmony export (immutable) */ __webpack_exports__["exactEquals"] = exactEquals;
 /* harmony export (immutable) */ __webpack_exports__["equals"] = equals;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(1);
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12099,9 +12113,9 @@ dat.utils.common);
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__rendering_gl_Drawable__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__globals__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__globals__ = __webpack_require__(2);
 
 
 
@@ -12257,9 +12271,9 @@ class Icosphere extends __WEBPACK_IMPORTED_MODULE_1__rendering_gl_Drawable__["a"
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__rendering_gl_Drawable__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__globals__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__globals__ = __webpack_require__(2);
 
 
 
@@ -12301,9 +12315,9 @@ class Square extends __WEBPACK_IMPORTED_MODULE_1__rendering_gl_Drawable__["a" /*
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__rendering_gl_Drawable__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__globals__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__globals__ = __webpack_require__(2);
 
 
 
@@ -12456,9 +12470,9 @@ class Cube extends __WEBPACK_IMPORTED_MODULE_1__rendering_gl_Drawable__["a" /* d
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__rendering_gl_Drawable__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__globals__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__globals__ = __webpack_require__(2);
 
 
 
@@ -12500,8 +12514,8 @@ class Sky extends __WEBPACK_IMPORTED_MODULE_1__rendering_gl_Drawable__["a" /* de
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__globals__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__globals__ = __webpack_require__(2);
 
 
 // In this file, `gl` is accessible because it is imported above
@@ -12542,6 +12556,7 @@ class OpenGLRenderer {
         prog.setInvViewProjMatrix(invViewProj);
         prog.setScreenDimensions(__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["b" /* vec2 */].fromValues(this.canvas.width, this.canvas.height));
         for (let drawable of drawables) {
+            prog.setModelMatrix(drawable.modelMatrix);
             prog.draw(drawable);
         }
     }
@@ -12555,7 +12570,7 @@ class OpenGLRenderer {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__globals__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__globals__ = __webpack_require__(2);
 
 // let slotArray = [gl.TEXTURE0, gl.TEXTURE1, gl.TEXTURE2, gl.TEXTURE3, gl.TEXTURE4];
 const glMap = {
@@ -12650,7 +12665,7 @@ function isPowerOf2(value) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_3d_view_controls__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_3d_view_controls___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_3d_view_controls__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_gl_matrix__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_gl_matrix__ = __webpack_require__(0);
 
 
 class Camera {
@@ -15743,8 +15758,8 @@ class ShaderControls {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__globals__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__globals__ = __webpack_require__(2);
 
 
 var activeProgram = null;
@@ -15999,7 +16014,7 @@ class ShaderProgram {
 /* 71 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\n\n/*----------  Shader Uniforms  ----------*/\nuniform mat4 u_Model;\nuniform mat4 u_ModelInvTr;\nuniform mat4 u_ViewProj;\nuniform int u_Time;\nuniform vec4 u_Eye;\n\n/*----------  Shader UI Controls  ----------*/\nuniform vec3 u_ControlsWaterBedrock1Color;\nuniform vec3 u_ControlsWaterBedrock2Color;\nuniform vec3 u_ControlsSandColor;\nuniform float u_ControlsWaterLevel;\nuniform float u_ControlsShoreLevel;\nuniform float u_ControlsElevation;\nuniform float u_ControlsNoiseScale;\n\n/*----------  Shader Inputs  ----------*/\nin vec4 vs_Pos;\nin vec4 vs_Nor;\nin vec4 vs_Col;\n\n/*----------  Shader Outputs  ----------*/\nout vec4 fs_Nor;\nout vec4 fs_LightVec;\nout vec4 fs_Col;\nout vec4 fs_Pos;\nout vec4 fs_SphereNor;\nout float fs_Spec;\nout float fs_Valid;\nout float fs_useMatcap;\n\n/*----------  Shader Constants  ----------*/\nconst float DEGREE_TO_RAD = 0.0174533;\nconst float RAD_TO_DEGREE = 57.2958;\nconst float NO_MATCAP = 0.0;\nconst float NO_SPEC = 0.0;\n\nconst float ROCK_MATCAP = 2.0;\nconst float SNOW_MATCAP = 3.0;\nconst float GRASS_1_MATCAP = 1.0;\nconst float GRASS_2_MATCAP = 4.0;\n\nconst float SAND_SPECULARITY = 2.0;\nconst float SNOW_SPECULARITY = 128.0;\n\n/*======================================================\n=            FMB with Analytical Derivative            =\n======================================================*/\nfloat hash1(float n) { return fract(n * 17.0 * fract(n * 0.3183099)); }\n\nvec4 noised(in vec3 x) {\n  vec3 p = floor(x);\n  vec3 w = fract(x);\n\n  vec3 u = w * w * w * (w * (w * 6.0 - 15.0) + 10.0);\n  vec3 du = 30.0 * w * w * (w * (w - 2.0) + 1.0);\n\n  float n = p.x + 317.0 * p.y + 157.0 * p.z;\n\n  float a = hash1(n + 0.0);\n  float b = hash1(n + 1.0);\n  float c = hash1(n + 317.0);\n  float d = hash1(n + 318.0);\n  float e = hash1(n + 157.0);\n  float f = hash1(n + 158.0);\n  float g = hash1(n + 474.0);\n  float h = hash1(n + 475.0);\n\n  float k0 = a;\n  float k1 = b - a;\n  float k2 = c - a;\n  float k3 = e - a;\n  float k4 = a - b - c + d;\n  float k5 = a - c - e + g;\n  float k6 = a - b - e + f;\n  float k7 = -a + b + c - d + e - f - g + h;\n\n  return vec4(\n      -1.0 + 2.0 * (k0 + k1 * u.x + k2 * u.y + k3 * u.z + k4 * u.x * u.y +\n                    k5 * u.y * u.z + k6 * u.z * u.x + k7 * u.x * u.y * u.z),\n      2.0 * du *\n          vec3(k1 + k4 * u.y + k6 * u.z + k7 * u.y * u.z,\n               k2 + k5 * u.z + k4 * u.x + k7 * u.z * u.x,\n               k3 + k6 * u.x + k5 * u.y + k7 * u.x * u.y));\n}\n\nconst mat3 m3 = mat3(0.00, 0.80, 0.60, -0.80, 0.36, -0.48, -0.60, -0.48, 0.64);\nconst mat3 m3i = mat3(0.00, -0.80, -0.60, 0.80, 0.36, -0.48, 0.60, -0.48, 0.64);\n\nvec4 fbmad(in vec3 x, int octaves) {\n  float f = 1.98;\n  float s = 0.49;\n  float a = 0.0;\n  float b = 0.5;\n  vec3 d = vec3(0.0);\n  mat3 m = mat3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);\n  for (int i = 0; i < octaves; i++) {\n    vec4 n = noised(x);\n    a += b * n.x;\n    d += b * m * n.yzw;\n    b *= s;\n    x = f * m3 * x;\n    m = f * m3i * m;\n  }\n  return vec4(a, d);\n}\n/*=====  End of FMB with Analytical Derivative  ======*/\n\n\n/**\n * @brief      Render the Planet's Water\n *\n * @memberof   Custom-water-vert\n *\n * @param[in]  vec4     Vertex Position\n * @param[in]  vec4     Vertex Normal\n * @param[in]  vec4     Vertex Color\n * @param[in]  isNight  Indicates if on night side\n */\nvoid renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,\n                  inout vec4 vertexColor, bool isNight) {\n  fs_Valid = 0.0;\n\n  /*----------  Uniform Control Variables  ----------*/\n  float waterThreshold = u_ControlsWaterLevel - 0.5;\n  vec4 bedrockColor1 = vec4(u_ControlsWaterBedrock1Color, 1.0);\n  vec4 bedrockColor2 = vec4(u_ControlsWaterBedrock2Color, 1.0);\n  vec4 sandColor = vec4(u_ControlsSandColor, 1.0);\n  float shoreLevel = (u_ControlsShoreLevel / 0.5) * 0.04;\n  float elevation = (0.5 / u_ControlsElevation) * 4.0;\n  float noiseScale = (u_ControlsNoiseScale / 0.5) * 3.0;\n  /*----------  End  ----------*/\n\n  vec4 originalPosition = vertexPosition;\n  vec4 originalNormal = vertexNormal;\n\n  fs_SphereNor = originalNormal;\n\n  vec3 noiseInput = vertexPosition.xyz * noiseScale;\n  float deepWaterThreshold = waterThreshold - 0.15;\n  float maxScale = 1.0;\n\n  float dist = length(vertexPosition.xyz - u_Eye.xyz);\n  int LOD = int(8.0 * (1.0 - smoothstep(0.0, 2.5, log(dist)))) + 4;\n  vec4 noiseAd = fbmad(noiseInput, LOD);\n  float noise = noiseAd.x;\n  vec3 derivative = noiseAd.yzw;\n\n  float originalNoise = noise;\n\n  bool isWater = noise < waterThreshold ? true : false;\n  bool isGrass = noise > waterThreshold ? true : false;\n  bool isMountains = false;\n  bool isCoast = false;\n\n  if (isWater) {\n    vertexColor = bedrockColor1;\n    vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseAd.yzw * 0.5)), 0);\n\n    if (noise < deepWaterThreshold) {\n      vertexColor = bedrockColor2;\n    }\n  } else {\n    fs_Spec = NO_SPEC;\n    // Grass 1\n    fs_useMatcap = GRASS_1_MATCAP;\n\n    if (noise < waterThreshold + shoreLevel) {\n      // Sand\n      vertexColor = sandColor;\n      fs_Spec = SAND_SPECULARITY;\n      isCoast = true;\n      fs_useMatcap = NO_MATCAP;\n    } else if (noise > waterThreshold + 0.15) {\n      // Grass 2\n      fs_useMatcap = GRASS_2_MATCAP;\n    }\n  }\n\n  float landNoise = noise;\n  float landHeight = landNoise / elevation;\n  vertexPosition = originalPosition + (originalNormal * landHeight);\n\n  vec4 landPosition = vertexPosition;\n\n  if (isGrass) {\n    vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseAd.yzw * 0.36)), 0);\n\n    if (landNoise > waterThreshold + 0.3) {\n      fs_useMatcap = ROCK_MATCAP;\n\n      float snowAppearance = dot(normalize(derivative), vec3(0, 1, 0));\n\n      vertexNormal =\n          vec4(normalize(originalNormal.xyz - (noiseAd.yzw * 0.45)), 0);\n\n      if (landNoise > waterThreshold + 0.4 && snowAppearance > 0.5) {\n        fs_useMatcap = SNOW_MATCAP;\n        fs_Spec = SNOW_SPECULARITY;\n      }\n    }\n  }\n}\n\nvoid main() {\n  vec4 vertexColor;\n  vec4 lightPos = vec4(0, 0, 0, 1);\n  vec4 vertexPosition = vs_Pos;\n  vec4 vertexNormal = vs_Nor;\n\n  fs_useMatcap = NO_MATCAP;\n\n  float lightRadius = 10.0;\n  lightPos.x = lightRadius * cos(float(u_Time) * 0.003);\n  lightPos.z = lightRadius * sin(float(u_Time) * 0.003);\n\n  float rads = dot(normalize(vertexNormal.xyz),\n                   normalize(vec3(vertexPosition - lightPos)));\n\n  bool isNight = true;\n\n  if (rads < 0.0) {\n    isNight = false;\n  }\n\n  renderPlanet(vertexPosition, vertexNormal, vertexColor, isNight);\n\n  fs_Col = vertexColor;\n\n  mat3 invTranspose = mat3(u_ModelInvTr);\n  fs_Nor = vec4(invTranspose * vec3(vertexNormal), 0);\n\n  vec4 modelposition = u_Model * vertexPosition;\n\n  fs_Pos = modelposition;\n\n  fs_LightVec = lightPos - modelposition;\n\n  gl_Position = u_ViewProj * modelposition;\n}\n"
+module.exports = "#version 300 es\n\n/*----------  Shader Uniforms  ----------*/\nuniform mat4 u_Model;\nuniform mat4 u_ModelInvTr;\nuniform mat4 u_ViewProj;\nuniform int u_Time;\nuniform vec4 u_Eye;\n\n/*----------  Shader UI Controls  ----------*/\nuniform vec3 u_ControlsWaterBedrock1Color;\nuniform vec3 u_ControlsWaterBedrock2Color;\nuniform vec3 u_ControlsSandColor;\nuniform float u_ControlsWaterLevel;\nuniform float u_ControlsShoreLevel;\nuniform float u_ControlsElevation;\nuniform float u_ControlsNoiseScale;\n\n/*----------  Shader Inputs  ----------*/\nin vec4 vs_Pos;\nin vec4 vs_Nor;\nin vec4 vs_Col;\n\n/*----------  Shader Outputs  ----------*/\nout vec4 fs_Nor;\nout vec4 fs_LightVec;\nout vec4 fs_Col;\nout vec4 fs_Pos;\nout vec4 fs_SphereNor;\nout float fs_Spec;\nout float fs_Valid;\nout float fs_useMatcap;\n\n/*----------  Shader Constants  ----------*/\nconst float DEGREE_TO_RAD = 0.0174533;\nconst float RAD_TO_DEGREE = 57.2958;\nconst float NO_MATCAP = 0.0;\nconst float NO_SPEC = 0.0;\n\nconst float ROCK_MATCAP = 2.0;\nconst float SNOW_MATCAP = 3.0;\nconst float GRASS_1_MATCAP = 1.0;\nconst float GRASS_2_MATCAP = 4.0;\n\nconst float SAND_SPECULARITY = 2.0;\nconst float SNOW_SPECULARITY = 128.0;\n\n/*======================================================\n=            FMB with Analytical Derivative            =\n======================================================*/\nfloat hash1(float n) { return fract(n * 17.0 * fract(n * 0.3183099)); }\n\nvec4 noised(in vec3 x) {\n  vec3 p = floor(x);\n  vec3 w = fract(x);\n\n  vec3 u = w * w * w * (w * (w * 6.0 - 15.0) + 10.0);\n  vec3 du = 30.0 * w * w * (w * (w - 2.0) + 1.0);\n\n  float n = p.x + 317.0 * p.y + 157.0 * p.z;\n\n  float a = hash1(n + 0.0);\n  float b = hash1(n + 1.0);\n  float c = hash1(n + 317.0);\n  float d = hash1(n + 318.0);\n  float e = hash1(n + 157.0);\n  float f = hash1(n + 158.0);\n  float g = hash1(n + 474.0);\n  float h = hash1(n + 475.0);\n\n  float k0 = a;\n  float k1 = b - a;\n  float k2 = c - a;\n  float k3 = e - a;\n  float k4 = a - b - c + d;\n  float k5 = a - c - e + g;\n  float k6 = a - b - e + f;\n  float k7 = -a + b + c - d + e - f - g + h;\n\n  return vec4(\n      -1.0 + 2.0 * (k0 + k1 * u.x + k2 * u.y + k3 * u.z + k4 * u.x * u.y +\n                    k5 * u.y * u.z + k6 * u.z * u.x + k7 * u.x * u.y * u.z),\n      2.0 * du *\n          vec3(k1 + k4 * u.y + k6 * u.z + k7 * u.y * u.z,\n               k2 + k5 * u.z + k4 * u.x + k7 * u.z * u.x,\n               k3 + k6 * u.x + k5 * u.y + k7 * u.x * u.y));\n}\n\nconst mat3 m3 = mat3(0.00, 0.80, 0.60, -0.80, 0.36, -0.48, -0.60, -0.48, 0.64);\nconst mat3 m3i = mat3(0.00, -0.80, -0.60, 0.80, 0.36, -0.48, 0.60, -0.48, 0.64);\n\nvec4 fbmad(in vec3 x, int octaves) {\n  float f = 1.98;\n  float s = 0.49;\n  float a = 0.0;\n  float b = 0.5;\n  vec3 d = vec3(0.0);\n  mat3 m = mat3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);\n  for (int i = 0; i < octaves; i++) {\n    vec4 n = noised(x);\n    a += b * n.x;\n    d += b * m * n.yzw;\n    b *= s;\n    x = f * m3 * x;\n    m = f * m3i * m;\n  }\n  return vec4(a, d);\n}\n/*=====  End of FMB with Analytical Derivative  ======*/\n\n/*=======================================================\n=            Simplex3D by Nikita Miropolskiy            =\n=======================================================*/\nvec3 random3(vec3 c) {\n  float j = 4096.0 * sin(dot(c, vec3(17.0, 59.4, 15.0)));\n  vec3 r;\n  r.z = fract(512.0 * j);\n  j *= .125;\n  r.x = fract(512.0 * j);\n  j *= .125;\n  r.y = fract(512.0 * j);\n  return r - 0.5;\n}\n\nconst float F3 = 0.3333333;\nconst float G3 = 0.1666667;\nfloat snoise(vec3 p) {\n  vec3 s = floor(p + dot(p, vec3(F3)));\n  vec3 x = p - s + dot(s, vec3(G3));\n\n  vec3 e = step(vec3(0.0), x - x.yzx);\n  vec3 i1 = e * (1.0 - e.zxy);\n  vec3 i2 = 1.0 - e.zxy * (1.0 - e);\n\n  vec3 x1 = x - i1 + G3;\n  vec3 x2 = x - i2 + 2.0 * G3;\n  vec3 x3 = x - 1.0 + 3.0 * G3;\n\n  vec4 w, d;\n\n  w.x = dot(x, x);\n  w.y = dot(x1, x1);\n  w.z = dot(x2, x2);\n  w.w = dot(x3, x3);\n\n  w = max(0.6 - w, 0.0);\n\n  d.x = dot(random3(s), x);\n  d.y = dot(random3(s + i1), x1);\n  d.z = dot(random3(s + i2), x2);\n  d.w = dot(random3(s + 1.0), x3);\n\n  w *= w;\n  w *= w;\n  d *= w;\n\n  return dot(d, vec4(52.0));\n}\n\nfloat snoiseFractal(vec3 m) {\n  return 0.5333333 * snoise(m) + 0.2666667 * snoise(2.0 * m) +\n         0.1333333 * snoise(4.0 * m) + 0.0666667 * snoise(8.0 * m);\n}\n/*=====  End of Simplex3D by Nikita Miropolskiy  ======*/\n\n/**\n * @brief      Render the Planet's Water\n *\n * @memberof   Custom-water-vert\n *\n * @param[in]  vec4     Vertex Position\n * @param[in]  vec4     Vertex Normal\n * @param[in]  vec4     Vertex Color\n * @param[in]  isNight  Indicates if on night side\n */\nvoid renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,\n                  inout vec4 vertexColor, bool isNight) {\n  fs_Valid = 0.0;\n\n  bool isWater, isGround;\n\n  float waterThreshold = u_ControlsWaterLevel - 0.5;\n  \n  vec4 sandColor = vec4(u_ControlsSandColor, 1.0);\n  float shoreLevel = (u_ControlsShoreLevel / 0.5) * 0.04;\n  float elevation = (0.5 / u_ControlsElevation) * 4.0;\n  float noiseScale = (u_ControlsNoiseScale / 0.5) * 3.0;\n\n  vec4 originalPosition = vertexPosition;\n  vec4 originalNormal = vertexNormal;\n\n  fs_SphereNor = originalNormal;\n\n  vec3 noiseInput = vertexPosition.xyz * noiseScale;\n  float deepWaterThreshold = waterThreshold - 0.15;\n  float maxScale = 1.0;\n\n  float dist = length(vertexPosition.xyz - u_Eye.xyz);\n  int LOD = int(8.0 * (1.0 - smoothstep(0.0, 2.5, log(dist)))) + 4;\n  vec4 noiseAd = fbmad(noiseInput, LOD);\n  float noise = noiseAd.x;\n  vec3 derivative = noiseAd.yzw;\n\n  isWater = noise < waterThreshold ? true : false;\n  isGround = noise > waterThreshold ? true : false;\n\n  if (isWater) {\n    vec4 bedrockColor1 = vec4(u_ControlsWaterBedrock1Color, 1.0);\n    vec4 bedrockColor2 = vec4(u_ControlsWaterBedrock2Color, 1.0);\n    \n    vertexColor = bedrockColor1;\n    vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseAd.yzw * 0.5)), 0);\n\n    if (noise < deepWaterThreshold) {\n      vertexColor = bedrockColor2;\n    }\n  } else {\n    // Grass 1\n    fs_Spec = NO_SPEC;\n    fs_useMatcap = GRASS_1_MATCAP;\n\n    float grassDarkJitter = snoiseFractal(vertexPosition.xyz * 13.0) * 0.1;\n\n    if (noise < waterThreshold + shoreLevel) {\n      // Sand\n      vertexColor = sandColor;\n      fs_Spec = SAND_SPECULARITY;\n      fs_useMatcap = NO_MATCAP;\n    } else if (noise > waterThreshold + 0.15 + grassDarkJitter) {\n      // Grass 2\n      fs_useMatcap = GRASS_2_MATCAP;\n    }\n  }\n\n  float landNoise = noise;\n  float landHeight = landNoise / elevation;\n  vertexPosition = originalPosition + (originalNormal * landHeight);\n\n  if (isGround) {\n    vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseAd.yzw * 0.36)), 0);\n\n    if (landNoise > waterThreshold + 0.3) {\n      fs_useMatcap = ROCK_MATCAP;\n\n      float snowAppearance = dot(normalize(derivative), vec3(0, 1, 0));\n      float snowJitter = snoiseFractal(vertexPosition.xyz * 7.0) * 0.05;\n\n      vertexNormal =\n          vec4(normalize(originalNormal.xyz - (noiseAd.yzw * 0.45)), 0);\n\n      if (landNoise > waterThreshold + 0.4 + snowJitter &&\n          snowAppearance > 0.5) {\n        fs_useMatcap = SNOW_MATCAP;\n        fs_Spec = SNOW_SPECULARITY;\n      }\n    }\n  }\n}\n\nvoid main() {\n  vec4 vertexColor;\n  vec4 lightPos = vec4(0, 0, 15, 1);\n  vec4 vertexPosition = vs_Pos;\n  vec4 vertexNormal = vs_Nor;\n\n  fs_useMatcap = NO_MATCAP;\n\n  // float lightRadius = 10.0;\n  // lightPos.x = lightRadius * cos(float(u_Time) * 0.003);\n  // lightPos.z = lightRadius * sin(float(u_Time) * 0.003);\n\n  float rads = dot(normalize(vertexNormal.xyz),\n                   normalize(vec3(vertexPosition - lightPos)));\n\n  bool isNight = true;\n\n  if (rads < 0.0) {\n    isNight = false;\n  }\n\n  renderPlanet(vertexPosition, vertexNormal, vertexColor, isNight);\n\n  fs_Col = vertexColor;\n\n  mat3 invTranspose = mat3(u_ModelInvTr);\n  fs_Nor = vec4(invTranspose * vec3(vertexNormal), 0);\n  fs_SphereNor = vec4(invTranspose * vec3(fs_SphereNor), 0);\n\n  vec4 modelposition = u_Model * vertexPosition;\n\n  fs_Pos = modelposition;\n\n  fs_LightVec = lightPos - modelposition;\n\n  gl_Position = u_ViewProj * modelposition;\n}\n"
 
 /***/ }),
 /* 72 */
@@ -16023,7 +16038,7 @@ module.exports = "#version 300 es\n\n// This is a fragment shader. If you've ope
 /* 75 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\n\n/*----------  Shader Uniforms  ----------*/\nuniform mat4 u_Model;\nuniform mat4 u_ModelInvTr;\nuniform mat4 u_ViewProj;\nuniform int u_Time;\n\n/*----------  Shader UI Controls  ----------*/\nuniform vec3 u_ControlsWaterColor;\nuniform float u_ControlsWaterOpacity;\nuniform float u_ControlsWaterLevel;\nuniform float u_ControlsElevation;\nuniform float u_ControlsNoiseScale;\n\n/*----------  Shader Input  ----------*/\nin vec4 vs_Pos;\nin vec4 vs_Nor;\nin vec4 vs_Col;\n\n/*----------  Shader Output  ----------*/\nout vec4 fs_Nor;\nout vec4 fs_LightVec;\nout vec4 fs_Col;\nout vec4 fs_Pos;\nout vec4 fs_SphereNor;\nout float fs_Spec;\nout float fs_Valid;\nout float fs_useMatcap;\n\n/*----------  Shader Constants  ----------*/\nconst float DEGREE_TO_RAD = 0.0174533;\nconst float RAD_TO_DEGREE = 57.2958;\n\n/*======================================================\n=            FMB with Analytical Derivative            =\n======================================================*/\nfloat hash1(float n) { return fract(n * 17.0 * fract(n * 0.3183099)); }\n\nvec4 noised(in vec3 x) {\n  vec3 p = floor(x);\n  vec3 w = fract(x);\n\n  vec3 u = w * w * w * (w * (w * 6.0 - 15.0) + 10.0);\n  vec3 du = 30.0 * w * w * (w * (w - 2.0) + 1.0);\n\n  float n = p.x + 317.0 * p.y + 157.0 * p.z;\n\n  float a = hash1(n + 0.0);\n  float b = hash1(n + 1.0);\n  float c = hash1(n + 317.0);\n  float d = hash1(n + 318.0);\n  float e = hash1(n + 157.0);\n  float f = hash1(n + 158.0);\n  float g = hash1(n + 474.0);\n  float h = hash1(n + 475.0);\n\n  float k0 = a;\n  float k1 = b - a;\n  float k2 = c - a;\n  float k3 = e - a;\n  float k4 = a - b - c + d;\n  float k5 = a - c - e + g;\n  float k6 = a - b - e + f;\n  float k7 = -a + b + c - d + e - f - g + h;\n\n  return vec4(\n      -1.0 + 2.0 * (k0 + k1 * u.x + k2 * u.y + k3 * u.z + k4 * u.x * u.y +\n                    k5 * u.y * u.z + k6 * u.z * u.x + k7 * u.x * u.y * u.z),\n      2.0 * du *\n          vec3(k1 + k4 * u.y + k6 * u.z + k7 * u.y * u.z,\n               k2 + k5 * u.z + k4 * u.x + k7 * u.z * u.x,\n               k3 + k6 * u.x + k5 * u.y + k7 * u.x * u.y));\n}\n\nconst mat3 m3 = mat3(0.00, 0.80, 0.60, -0.80, 0.36, -0.48, -0.60, -0.48, 0.64);\nconst mat3 m3i = mat3(0.00, -0.80, -0.60, 0.80, 0.36, -0.48, 0.60, -0.48, 0.64);\n\n// FBM with Analytical Derivative\nvec4 fbmad(in vec3 x, int octaves) {\n  float f = 1.98;  // could be 2.0\n  float s = 0.49;  // could be 0.5\n  float a = 0.0;\n  float b = 0.5;\n  vec3 d = vec3(0.0);\n  mat3 m = mat3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);\n  for (int i = 0; i < octaves; i++) {\n    vec4 n = noised(x);\n    a += b * n.x;        // accumulate values\n    d += b * m * n.yzw;  // accumulate derivatives\n    b *= s;\n    x = f * m3 * x;\n    m = f * m3i * m;\n  }\n  return vec4(a, d);\n}\n/*=====  End of FMB with Analytical Derivative  ======*/\n\nmat4 rotationMatrix(vec3 axis, float angle) {\n  axis = normalize(axis);\n  float s = sin(angle);\n  float c = cos(angle);\n  float oc = 1.0 - c;\n\n  return mat4(\n      oc * axis.x * axis.x + c, oc * axis.x * axis.y - axis.z * s,\n      oc * axis.z * axis.x + axis.y * s, 0.0, oc * axis.x * axis.y + axis.z * s,\n      oc * axis.y * axis.y + c, oc * axis.y * axis.z - axis.x * s, 0.0,\n      oc * axis.z * axis.x - axis.y * s, oc * axis.y * axis.z + axis.x * s,\n      oc * axis.z * axis.z + c, 0.0, 0.0, 0.0, 0.0, 1.0);\n}\n\n/**\n * @brief      Render the Planet's Water\n *\n * @memberof   Custom-water-vert\n *\n * @param[in]  vec4     Vertex Position\n * @param[in]  vec4     Vertex Normal\n * @param[in]  vec4     Vertex Color\n * @param[in]  isNight  Indicates if on night side\n */\nvoid renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,\n                  inout vec4 vertexColor, bool isNight) {\n  vec4 waterColor = vec4(u_ControlsWaterColor, u_ControlsWaterOpacity);\n  float elevation = (0.5 / u_ControlsElevation) * 4.0;\n  float noiseScale = (u_ControlsNoiseScale / 0.5) * 3.0;\n\n  vertexColor = waterColor;\n\n  fs_Valid = 1.0;\n\n  vec4 originalPosition = vertexPosition;\n  vec4 originalNormal = vertexNormal;\n\n  fs_SphereNor = originalNormal;\n\n  vec3 noiseInput = vertexPosition.xyz * noiseScale;\n\n  float waterThreshold = u_ControlsWaterLevel - 0.5;\n\n  vec4 noiseAd = fbmad(noiseInput, 8);\n  float noise = noiseAd.x;\n\n  bool isWater = noise < waterThreshold ? true : false;\n\n  if (isWater) {\n    fs_Spec = 256.0;\n\n    fs_Valid = 0.0;\n\n    float landHeight = waterThreshold / elevation;\n    vertexPosition = originalPosition + (originalNormal * landHeight);\n\n    noiseInput = vertexPosition.xyz * 3.0 + vec3(float(u_Time) * 0.0008);\n    vec4 noiseWaves = fbmad(noiseInput, 8);\n\n    vertexNormal =\n        vec4(normalize(vertexNormal.xyz - (noiseWaves.yzw * 0.3)), 0);\n  }\n}\n\nvoid main() {\n  vec4 vertexColor;\n  vec4 lightPos = vec4(0, 0, 0, 1);\n\n  vec4 vertexPosition = vs_Pos;\n  vec4 vertexNormal = vs_Nor;\n  fs_useMatcap = 0.0;\n\n  float lightRadius = 10.0;\n  lightPos.x = lightRadius * cos(float(u_Time) * 0.003);\n  lightPos.z = lightRadius * sin(float(u_Time) * 0.003);\n\n  float rads = dot(normalize(vertexNormal.xyz),\n                   normalize(vec3(vertexPosition - lightPos)));\n\n  bool isNight = true;\n\n  if (rads < 0.0) {\n    isNight = false;\n  }\n\n  renderPlanet(vertexPosition, vertexNormal, vertexColor, isNight);\n\n  fs_Col = vertexColor;\n\n  mat3 invTranspose = mat3(u_ModelInvTr);\n  fs_Nor = vec4(invTranspose * vec3(vertexNormal), 0);\n\n  vec4 modelposition = u_Model * vertexPosition;\n\n  fs_Pos = modelposition;\n\n  fs_LightVec = lightPos - modelposition;\n\n  gl_Position = u_ViewProj * modelposition;\n}\n"
+module.exports = "#version 300 es\n\n/*----------  Shader Uniforms  ----------*/\nuniform mat4 u_Model;\nuniform mat4 u_ModelInvTr;\nuniform mat4 u_ViewProj;\nuniform int u_Time;\n\n/*----------  Shader UI Controls  ----------*/\nuniform vec3 u_ControlsWaterColor;\nuniform float u_ControlsWaterOpacity;\nuniform float u_ControlsWaterLevel;\nuniform float u_ControlsElevation;\nuniform float u_ControlsNoiseScale;\n\n/*----------  Shader Input  ----------*/\nin vec4 vs_Pos;\nin vec4 vs_Nor;\nin vec4 vs_Col;\n\n/*----------  Shader Output  ----------*/\nout vec4 fs_Nor;\nout vec4 fs_LightVec;\nout vec4 fs_Col;\nout vec4 fs_Pos;\nout vec4 fs_SphereNor;\nout float fs_Spec;\nout float fs_Valid;\nout float fs_useMatcap;\n\n/*----------  Shader Constants  ----------*/\nconst float DEGREE_TO_RAD = 0.0174533;\nconst float RAD_TO_DEGREE = 57.2958;\n\n/*======================================================\n=            FMB with Analytical Derivative            =\n======================================================*/\nfloat hash1(float n) { return fract(n * 17.0 * fract(n * 0.3183099)); }\n\nvec4 noised(in vec3 x) {\n  vec3 p = floor(x);\n  vec3 w = fract(x);\n\n  vec3 u = w * w * w * (w * (w * 6.0 - 15.0) + 10.0);\n  vec3 du = 30.0 * w * w * (w * (w - 2.0) + 1.0);\n\n  float n = p.x + 317.0 * p.y + 157.0 * p.z;\n\n  float a = hash1(n + 0.0);\n  float b = hash1(n + 1.0);\n  float c = hash1(n + 317.0);\n  float d = hash1(n + 318.0);\n  float e = hash1(n + 157.0);\n  float f = hash1(n + 158.0);\n  float g = hash1(n + 474.0);\n  float h = hash1(n + 475.0);\n\n  float k0 = a;\n  float k1 = b - a;\n  float k2 = c - a;\n  float k3 = e - a;\n  float k4 = a - b - c + d;\n  float k5 = a - c - e + g;\n  float k6 = a - b - e + f;\n  float k7 = -a + b + c - d + e - f - g + h;\n\n  return vec4(\n      -1.0 + 2.0 * (k0 + k1 * u.x + k2 * u.y + k3 * u.z + k4 * u.x * u.y +\n                    k5 * u.y * u.z + k6 * u.z * u.x + k7 * u.x * u.y * u.z),\n      2.0 * du *\n          vec3(k1 + k4 * u.y + k6 * u.z + k7 * u.y * u.z,\n               k2 + k5 * u.z + k4 * u.x + k7 * u.z * u.x,\n               k3 + k6 * u.x + k5 * u.y + k7 * u.x * u.y));\n}\n\nconst mat3 m3 = mat3(0.00, 0.80, 0.60, -0.80, 0.36, -0.48, -0.60, -0.48, 0.64);\nconst mat3 m3i = mat3(0.00, -0.80, -0.60, 0.80, 0.36, -0.48, 0.60, -0.48, 0.64);\n\n// FBM with Analytical Derivative\nvec4 fbmad(in vec3 x, int octaves) {\n  float f = 1.98;  // could be 2.0\n  float s = 0.49;  // could be 0.5\n  float a = 0.0;\n  float b = 0.5;\n  vec3 d = vec3(0.0);\n  mat3 m = mat3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);\n  for (int i = 0; i < octaves; i++) {\n    vec4 n = noised(x);\n    a += b * n.x;        // accumulate values\n    d += b * m * n.yzw;  // accumulate derivatives\n    b *= s;\n    x = f * m3 * x;\n    m = f * m3i * m;\n  }\n  return vec4(a, d);\n}\n/*=====  End of FMB with Analytical Derivative  ======*/\n\nmat4 rotationMatrix(vec3 axis, float angle) {\n  axis = normalize(axis);\n  float s = sin(angle);\n  float c = cos(angle);\n  float oc = 1.0 - c;\n\n  return mat4(\n      oc * axis.x * axis.x + c, oc * axis.x * axis.y - axis.z * s,\n      oc * axis.z * axis.x + axis.y * s, 0.0, oc * axis.x * axis.y + axis.z * s,\n      oc * axis.y * axis.y + c, oc * axis.y * axis.z - axis.x * s, 0.0,\n      oc * axis.z * axis.x - axis.y * s, oc * axis.y * axis.z + axis.x * s,\n      oc * axis.z * axis.z + c, 0.0, 0.0, 0.0, 0.0, 1.0);\n}\n\n/**\n * @brief      Render the Planet's Water\n *\n * @memberof   Custom-water-vert\n *\n * @param[in]  vec4     Vertex Position\n * @param[in]  vec4     Vertex Normal\n * @param[in]  vec4     Vertex Color\n * @param[in]  isNight  Indicates if on night side\n */\nvoid renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,\n                  inout vec4 vertexColor, bool isNight) {\n  vec4 waterColor = vec4(u_ControlsWaterColor, u_ControlsWaterOpacity);\n  float noiseScale = (u_ControlsNoiseScale / 0.5) * 3.0;\n\n  vertexColor = waterColor;\n\n  fs_Valid = 1.0;\n\n  vec4 originalPosition = vertexPosition;\n  vec4 originalNormal = vertexNormal;\n\n  fs_SphereNor = originalNormal;\n\n  vec3 noiseInput = vertexPosition.xyz * noiseScale;\n\n  float waterThreshold = u_ControlsWaterLevel - 0.5;\n\n  vec4 noiseAd = fbmad(noiseInput, 8);\n  float noise = noiseAd.x;\n\n  bool isWater = noise < waterThreshold ? true : false;\n\n  if (isWater) {\n    fs_Spec = 256.0;\n\n    fs_Valid = 0.0;\n\n    float elevation = (0.5 / u_ControlsElevation) * 4.0;\n\n    float landHeight = waterThreshold / elevation;\n    vertexPosition = originalPosition + (originalNormal * landHeight);\n\n    noiseInput = vertexPosition.xyz * 3.0 + vec3(float(u_Time) * 0.0008);\n    vec4 noiseWaves = fbmad(noiseInput, 8);\n\n    vertexNormal =\n        vec4(normalize(vertexNormal.xyz - (noiseWaves.yzw * 0.3)), 0);\n  }\n}\n\nvoid main() {\n  vec4 vertexColor;\n  vec4 lightPos = vec4(0, 0, 15, 1);\n\n  vec4 vertexPosition = vs_Pos;\n  vec4 vertexNormal = vs_Nor;\n  fs_useMatcap = 0.0;\n\n  float rads = dot(normalize(vertexNormal.xyz),\n                   normalize(vec3(vertexPosition - lightPos)));\n\n  bool isNight = true;\n\n  if (rads < 0.0) {\n    isNight = false;\n  }\n\n  renderPlanet(vertexPosition, vertexNormal, vertexColor, isNight);\n\n  fs_Col = vertexColor;\n\n  mat3 invTranspose = mat3(u_ModelInvTr);\n  fs_Nor = vec4(invTranspose * vec3(vertexNormal), 0);\n  fs_SphereNor = vec4(invTranspose * vec3(fs_SphereNor), 0);\n\n  vec4 modelposition = u_Model * vertexPosition;\n\n  fs_Pos = modelposition;\n\n  fs_LightVec = lightPos - modelposition;\n\n  gl_Position = u_ViewProj * modelposition;\n}\n"
 
 /***/ })
 /******/ ]);
