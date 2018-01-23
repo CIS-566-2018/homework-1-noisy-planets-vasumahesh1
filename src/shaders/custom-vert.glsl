@@ -108,6 +108,7 @@ vec4 fbmad(in vec3 x, int octaves) {
 }
 /*=====  End of FMB with Analytical Derivative  ======*/
 
+
 /**
  * @brief      Render the Planet's Water
  *
