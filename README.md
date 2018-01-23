@@ -5,6 +5,8 @@
 ![](images/title_1.png)
 ![](images/title_2.png)
 
+[Demo URL](https://vasumahesh1.github.io/homework-1-noisy-planets-vasumahesh1/)
+
 ### Overview
 
 I used most of the information from the Implicit Procedural Planet [paper](https://static1.squarespace.com/static/58a1bc3c3e00be6bfe6c228c/t/58a4d25146c3c4233fb15cc2/1487196929690/ImplicitProceduralPlanetGeneration-Report.pdf) and some help from [Inigo Quillez](http://www.iquilezles.org/www/index.htm) 's blog. 
