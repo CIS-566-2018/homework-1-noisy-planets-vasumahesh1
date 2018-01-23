@@ -108,6 +108,60 @@ vec4 fbmad(in vec3 x, int octaves) {
 }
 /*=====  End of FMB with Analytical Derivative  ======*/
 
+/*=======================================================
+=            Simplex3D by Nikita Miropolskiy            =
+=======================================================*/
+vec3 random3(vec3 c) {
+  float j = 4096.0 * sin(dot(c, vec3(17.0, 59.4, 15.0)));
+  vec3 r;
+  r.z = fract(512.0 * j);
+  j *= .125;
+  r.x = fract(512.0 * j);
+  j *= .125;
+  r.y = fract(512.0 * j);
+  return r - 0.5;
+}
+
+const float F3 = 0.3333333;
+const float G3 = 0.1666667;
+float snoise(vec3 p) {
+  vec3 s = floor(p + dot(p, vec3(F3)));
+  vec3 x = p - s + dot(s, vec3(G3));
+
+  vec3 e = step(vec3(0.0), x - x.yzx);
+  vec3 i1 = e * (1.0 - e.zxy);
+  vec3 i2 = 1.0 - e.zxy * (1.0 - e);
+
+  vec3 x1 = x - i1 + G3;
+  vec3 x2 = x - i2 + 2.0 * G3;
+  vec3 x3 = x - 1.0 + 3.0 * G3;
+
+  vec4 w, d;
+
+  w.x = dot(x, x);
+  w.y = dot(x1, x1);
+  w.z = dot(x2, x2);
+  w.w = dot(x3, x3);
+
+  w = max(0.6 - w, 0.0);
+
+  d.x = dot(random3(s), x);
+  d.y = dot(random3(s + i1), x1);
+  d.z = dot(random3(s + i2), x2);
+  d.w = dot(random3(s + 1.0), x3);
+
+  w *= w;
+  w *= w;
+  d *= w;
+
+  return dot(d, vec4(52.0));
+}
+
+float snoiseFractal(vec3 m) {
+  return 0.5333333 * snoise(m) + 0.2666667 * snoise(2.0 * m) +
+         0.1333333 * snoise(4.0 * m) + 0.0666667 * snoise(8.0 * m);
+}
+/*=====  End of Simplex3D by Nikita Miropolskiy  ======*/
 
 /**
  * @brief      Render the Planet's Water
@@ -123,15 +177,14 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
                   inout vec4 vertexColor, bool isNight) {
   fs_Valid = 0.0;
 
-  /*----------  Uniform Control Variables  ----------*/
+  bool isWater, isGround;
+
   float waterThreshold = u_ControlsWaterLevel - 0.5;
-  vec4 bedrockColor1 = vec4(u_ControlsWaterBedrock1Color, 1.0);
-  vec4 bedrockColor2 = vec4(u_ControlsWaterBedrock2Color, 1.0);
+  
   vec4 sandColor = vec4(u_ControlsSandColor, 1.0);
   float shoreLevel = (u_ControlsShoreLevel / 0.5) * 0.04;
   float elevation = (0.5 / u_ControlsElevation) * 4.0;
   float noiseScale = (u_ControlsNoiseScale / 0.5) * 3.0;
-  /*----------  End  ----------*/
 
   vec4 originalPosition = vertexPosition;
   vec4 originalNormal = vertexNormal;
@@ -148,14 +201,13 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
   float noise = noiseAd.x;
   vec3 derivative = noiseAd.yzw;
 
-  float originalNoise = noise;
-
-  bool isWater = noise < waterThreshold ? true : false;
-  bool isGrass = noise > waterThreshold ? true : false;
-  bool isMountains = false;
-  bool isCoast = false;
+  isWater = noise < waterThreshold ? true : false;
+  isGround = noise > waterThreshold ? true : false;
 
   if (isWater) {
+    vec4 bedrockColor1 = vec4(u_ControlsWaterBedrock1Color, 1.0);
+    vec4 bedrockColor2 = vec4(u_ControlsWaterBedrock2Color, 1.0);
+    
     vertexColor = bedrockColor1;
     vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseAd.yzw * 0.5)), 0);
 
@@ -163,17 +215,18 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
       vertexColor = bedrockColor2;
     }
   } else {
-    fs_Spec = NO_SPEC;
     // Grass 1
+    fs_Spec = NO_SPEC;
     fs_useMatcap = GRASS_1_MATCAP;
+
+    float grassDarkJitter = snoiseFractal(vertexPosition.xyz * 13.0) * 0.1;
 
     if (noise < waterThreshold + shoreLevel) {
       // Sand
       vertexColor = sandColor;
       fs_Spec = SAND_SPECULARITY;
-      isCoast = true;
       fs_useMatcap = NO_MATCAP;
-    } else if (noise > waterThreshold + 0.15) {
+    } else if (noise > waterThreshold + 0.15 + grassDarkJitter) {
       // Grass 2
       fs_useMatcap = GRASS_2_MATCAP;
     }
@@ -183,20 +236,20 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
   float landHeight = landNoise / elevation;
   vertexPosition = originalPosition + (originalNormal * landHeight);
 
-  vec4 landPosition = vertexPosition;
-
-  if (isGrass) {
+  if (isGround) {
     vertexNormal = vec4(normalize(vertexNormal.xyz - (noiseAd.yzw * 0.36)), 0);
 
     if (landNoise > waterThreshold + 0.3) {
       fs_useMatcap = ROCK_MATCAP;
 
       float snowAppearance = dot(normalize(derivative), vec3(0, 1, 0));
+      float snowJitter = snoiseFractal(vertexPosition.xyz * 7.0) * 0.05;
 
       vertexNormal =
           vec4(normalize(originalNormal.xyz - (noiseAd.yzw * 0.45)), 0);
 
-      if (landNoise > waterThreshold + 0.4 && snowAppearance > 0.5) {
+      if (landNoise > waterThreshold + 0.4 + snowJitter &&
+          snowAppearance > 0.5) {
         fs_useMatcap = SNOW_MATCAP;
         fs_Spec = SNOW_SPECULARITY;
       }
@@ -206,15 +259,15 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
 
 void main() {
   vec4 vertexColor;
-  vec4 lightPos = vec4(0, 0, 0, 1);
+  vec4 lightPos = vec4(0, 0, 15, 1);
   vec4 vertexPosition = vs_Pos;
   vec4 vertexNormal = vs_Nor;
 
   fs_useMatcap = NO_MATCAP;
 
-  float lightRadius = 10.0;
-  lightPos.x = lightRadius * cos(float(u_Time) * 0.003);
-  lightPos.z = lightRadius * sin(float(u_Time) * 0.003);
+  // float lightRadius = 10.0;
+  // lightPos.x = lightRadius * cos(float(u_Time) * 0.003);
+  // lightPos.z = lightRadius * sin(float(u_Time) * 0.003);
 
   float rads = dot(normalize(vertexNormal.xyz),
                    normalize(vec3(vertexPosition - lightPos)));
@@ -231,6 +284,7 @@ void main() {
 
   mat3 invTranspose = mat3(u_ModelInvTr);
   fs_Nor = vec4(invTranspose * vec3(vertexNormal), 0);
+  fs_SphereNor = vec4(invTranspose * vec3(fs_SphereNor), 0);
 
   vec4 modelposition = u_Model * vertexPosition;
 

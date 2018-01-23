@@ -123,7 +123,6 @@ mat4 rotationMatrix(vec3 axis, float angle) {
 void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
                   inout vec4 vertexColor, bool isNight) {
   vec4 waterColor = vec4(u_ControlsWaterColor, u_ControlsWaterOpacity);
-  float elevation = (0.5 / u_ControlsElevation) * 4.0;
   float noiseScale = (u_ControlsNoiseScale / 0.5) * 3.0;
 
   vertexColor = waterColor;
@@ -149,6 +148,8 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
 
     fs_Valid = 0.0;
 
+    float elevation = (0.5 / u_ControlsElevation) * 4.0;
+
     float landHeight = waterThreshold / elevation;
     vertexPosition = originalPosition + (originalNormal * landHeight);
 
@@ -162,15 +163,11 @@ void renderPlanet(inout vec4 vertexPosition, inout vec4 vertexNormal,
 
 void main() {
   vec4 vertexColor;
-  vec4 lightPos = vec4(0, 0, 0, 1);
+  vec4 lightPos = vec4(0, 0, 15, 1);
 
   vec4 vertexPosition = vs_Pos;
   vec4 vertexNormal = vs_Nor;
   fs_useMatcap = 0.0;
-
-  float lightRadius = 10.0;
-  lightPos.x = lightRadius * cos(float(u_Time) * 0.003);
-  lightPos.z = lightRadius * sin(float(u_Time) * 0.003);
 
   float rads = dot(normalize(vertexNormal.xyz),
                    normalize(vec3(vertexPosition - lightPos)));
@@ -187,6 +184,7 @@ void main() {
 
   mat3 invTranspose = mat3(u_ModelInvTr);
   fs_Nor = vec4(invTranspose * vec3(vertexNormal), 0);
+  fs_SphereNor = vec4(invTranspose * vec3(fs_SphereNor), 0);
 
   vec4 modelposition = u_Model * vertexPosition;
 

@@ -56,6 +56,7 @@ class OpenGLRenderer {
     prog.setScreenDimensions(vec2.fromValues(this.canvas.width, this.canvas.height));
 
     for (let drawable of drawables) {
+      prog.setModelMatrix(drawable.modelMatrix);
       prog.draw(drawable);
     }
   }

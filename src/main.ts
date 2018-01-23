@@ -1,4 +1,4 @@
-import { vec3, vec4 } from 'gl-matrix';
+import { vec3, vec4, mat4 } from 'gl-matrix';
 import * as Stats from 'stats-js';
 import * as DAT from 'dat-gui';
 import Icosphere from './geometry/Icosphere';
@@ -25,6 +25,9 @@ let controls = {
     opacity: 0.65
   }
 };
+
+let prevTime: number;
+let degreePerMS: number = -5.0 / 1000.0;
 
 let icosphere: Icosphere;
 let square: Square;
@@ -63,6 +66,8 @@ function loadPlanetScene() {
   grassDarkTexture = new Texture('./src/textures/planet1/foliage_dark.png');
   mountainTexture = new Texture('./src/textures/planet1/mountain.jpg');
   snowTexture = new Texture('./src/textures/planet1/snow.png');
+
+  mat4.identity(icosphere.modelMatrix);
 }
 
 function loadRedPlanetScene() {
@@ -79,6 +84,8 @@ function loadRedPlanetScene() {
   shaderControls.elevation = 1.23;
   shaderControls.shoreLevel = 0.37;
   shaderControls.noiseScale = 0.81;
+
+  mat4.identity(icosphere.modelMatrix);
 }
 
 function loadTestScene() {
@@ -208,6 +215,15 @@ function main() {
 
   // This function will be called every frame
   function tick() {
+    let deltaTime = (new Date()).getTime() - prevTime;
+
+    let degrees = deltaTime * degreePerMS;
+
+    let rotDelta = mat4.create();
+
+    mat4.fromRotation(rotDelta, degrees * 0.0174533, vec3.fromValues(0, 1, 0));
+    mat4.multiply(icosphere.modelMatrix, icosphere.modelMatrix, rotDelta);
+
     camera.update();
     let position = camera.getPosition();
     stats.begin();
@@ -274,6 +290,8 @@ function main() {
       shouldCapture = false;
     }
 
+    prevTime = (new Date()).getTime();
+
     // Tell the browser to call `tick` again whenever it renders a new frame
     requestAnimationFrame(tick);
   }
@@ -289,6 +307,7 @@ function main() {
   camera.updateProjectionMatrix();
 
   // Start the render loop
+  prevTime = (new Date()).getTime();
   tick();
 }
 

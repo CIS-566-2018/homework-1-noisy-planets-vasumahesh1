@@ -1,7 +1,10 @@
+import { mat4 } from 'gl-matrix';
 import {gl} from '../../globals';
 
 abstract class Drawable {
   count: number = 0;
+
+  modelMatrix: mat4 = mat4.create();
 
   bufIdx: WebGLBuffer;
   bufPos: WebGLBuffer;
