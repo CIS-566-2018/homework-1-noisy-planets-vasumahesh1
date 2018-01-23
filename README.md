@@ -45,6 +45,10 @@ Implemented LOD feature as described in the [paper](https://static1.squarespace.
 I used matcap to get terrain colors. Some colors are still a single hex value, I felt matcap gave a way more cooler look to it that just flat colors.
 
 
+### Procedural Sky
+
+Includes Meteor showers & Stars.
+
 
 ## Useful Links
 - [Analytical Derivatives in Noise](http://www.iquilezles.org/www/articles/morenoise/morenoise.htm)
