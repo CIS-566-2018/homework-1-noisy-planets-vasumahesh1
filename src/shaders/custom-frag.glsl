@@ -1,24 +1,13 @@
 #version 300 es
 
-// This is a fragment shader. If you've opened this file first, please
-// open and read lambert.vert.glsl before reading on.
-// Unlike the vertex shader, the fragment shader actually does compute
-// the shading of geometry. For every pixel in your program's output
-// screen, the fragment shader is run for every bit of geometry that
-// particular pixel overlaps. By implicitly interpolating the position
-// data passed into the fragment shader by the vertex shader, the fragment shader
-// can compute what color to apply to its pixel based on things like vertex
-// position, light position, and vertex color.
 precision highp float;
 
-uniform vec4 u_Color; // The color with which to render this instance of geometry.
 uniform vec4 u_Eye;
 uniform sampler2D u_Texture;
 uniform sampler2D u_Texture1;
 uniform sampler2D u_Texture2;
 uniform sampler2D u_Texture3;
-// These are the interpolated values out of the rasterizer, so you can't know
-// their specific values without knowing the vertices that contributed to them
+
 in vec4 fs_Nor;
 in vec4 fs_LightVec;
 in vec4 fs_Col;
@@ -28,21 +17,16 @@ in float fs_Spec;
 in float fs_Valid;
 in float fs_useMatcap;
 
-out vec4 out_Col; // This is the final output color that you will see on your
-                  // screen for the pixel that is currently being processed.
+out vec4 out_Col;
 
-
-void main()
-{
+void main() {
   if (fs_Valid != 0.0) {
     discard;
     return;
   }
 
-  // Debug Normals
-  // out_Col = vec4((fs_Nor.xyz + vec3(1.0,1.0,1.0))/2.0, 1.0);
-
-  float lightFactor = dot(normalize(fs_SphereNor.xyz), normalize(fs_LightVec.xyz));
+  float lightFactor =
+      dot(normalize(fs_SphereNor.xyz), normalize(fs_LightVec.xyz));
 
   if (lightFactor < 0.0) {
     lightFactor = 0.0;
@@ -53,8 +37,10 @@ void main()
 
   // Material base color (before shading)
   vec4 diffuseColor = fs_Col;
-  float alpha = diffuseColor.a;;
+  float alpha = diffuseColor.a;
+  ;
 
+  // Use Matcap if Possible
   if (fs_useMatcap > 3.0) {
     vec2 coords = vec2((fs_Nor.x + 1.0) / 2.0, (fs_Nor.y + 1.0) / 2.0);
     diffuseColor = texture(u_Texture3, coords);
@@ -91,7 +77,8 @@ void main()
     specularTerm = max(pow(dot(H, normalize(fs_Nor)), fs_Spec), 0.0);
   }
 
-  float lightIntensity = ambientTerm + (diffuseTerm + specularTerm) * lightFactor;
+  float lightIntensity =
+      ambientTerm + (diffuseTerm + specularTerm) * lightFactor;
 
   vec4 finalColor = vec4(diffuseColor.rgb * lightIntensity, alpha);
   finalColor.x = clamp(finalColor.x, 0.0, 1.0);
